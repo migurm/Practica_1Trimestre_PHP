@@ -10,7 +10,15 @@ function espacios_intermedios($entrada){
 };
 //True ->compuesto por numeros, letras, eñes y espacios
 function carac_num_espacios($entrada){
-    return preg_match('/^[a-zA-ZñÑáÁéÉíÍóÓúÚ 0-9]+$/', $entrada);
+    return preg_match('/^[a-zA-ZñÑáÁéÉíÍóÓúÚ 0-9]{0,40}$/', $entrada);
 
 };
+
+function carac_barraBaja($entrada){
+    return preg_match('/^[a-zA-Z_]{4,12}$/', $entrada);
+}
+
+function formato_date($entrada){
+    return preg_match('/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/', $entrada);
+}
 ?>
