@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios</title>
+    <title>Registro de usuario</title>
+	<?php require "../php/funciones.php" ?>
 </head>
 <body>
 <form action="" method="POST">
@@ -15,6 +16,7 @@
 				Nombre:
 			</label>
 			<input type="text" name="nombre_usuario">
+			
 			<label>
 				Contreaseña: 
 			</label>
