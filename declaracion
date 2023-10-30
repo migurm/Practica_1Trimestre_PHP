@@ -1,0 +1,37 @@
+Declaración de la bbdd
+use db_tienda;
+
+CREATE TABLE productos (
+idProducto INT(8) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+nombreProducto VARCHAR(40) NOT NULL,
+precio NUMERIC (7,2) NOT NULL,
+descripcion VARCHAR(255) NOT NULL,
+cantidad NUMERIC(5) NOT NULL
+);
+
+CREATE TABLE usuarios (
+usuario VARCHAR(12) PRIMARY KEY NOT NULL,
+contrasena VARCHAR(255) NOT NULL,
+fechaNacimiento DATE NOT NULL
+);
+
+CREATE TABLE cestas (
+idCesta INT(8) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+usuario VARCHAR(12) NOT NULL,
+FOREIGN KEY(usuario) REFERENCES usuarios(usuario),
+precioTotal NUMERIC(8,2) NOT NULL DEFAULT 0
+);
+
+CREATE TABLE productos_cestas (
+idProducto INT(8) NOT NULL,
+idCesta INT(8) NOT NULL,
+cantidad NUMERIC(2) NOT NULL,
+CONSTRAINT pk_productosCestas
+	PRIMARY KEY (idProducto, idCesta),
+CONSTRAINT fk_productosCestas_productos
+	FOREIGN KEY(idProducto) 
+    REFERENCES productos(idProducto),
+CONSTRAINT fk_productosCestas_cestas
+	FOREIGN KEY(idCesta)
+    REFERENCES cestas(idCesta)
+);
