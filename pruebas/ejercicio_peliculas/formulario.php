@@ -47,16 +47,22 @@
     }
     //No parece muy exhaustivo
 
-    //Recibir un fichero con $_FILES ["combreCampo"]["queQueremosCoger"] -> TYPE, NAME, SIZE
+    //Recibir un fichero con $_FILES ["combreCampo"]["queQueremosCoger"] -> TYPE, NAME, SIZE, TMP_NAME
+    //TMP_NAME es una especie de ruta temporal donde se aloja la imagen hasta saber que hacer con ella
     //Sacar el nombre del fichero.
     $nombre_imagen = $_FILES["imagen"]["name"];
     echo $nombre_imagen;
     $tipo_imagen = $_FILES["imagen"]["type"];
     $tamano_imagen = $_FILES["imagen"]["size"];
+    $ruta_temporal = $_FILES["imagen"]["tmp_name"];
 
     //El size dividido en 1024 nos da los megabytes
 
-    echo $nombre_imagen." ".$tipo_imagen." ".$tamano_imagen;
+    //Para guardar la imagen.
+    $ruta_final = "../contenedor_imagenes/".$nombre_imagen;
+    move_uploaded_file($ruta_temporal, $ruta_final);
+
+    echo $nombre_imagen." ".$tipo_imagen." ".$tamano_imagen." ".$ruta_temporal;
 
 
 
@@ -130,6 +136,7 @@
         </div>
     </div>
     <?php
+
     if(isset($id_pelicula) && isset($titulo_pelicula) && isset($fecha_estreno) && isset($calificacion_edad)){
         echo "<h3>ID: $id_pelicula</h3>";
         echo "<h3>Título: $titulo_pelicula</h3>";
@@ -137,9 +144,14 @@
         echo "<h3>Calificacion edad: $calificacion_edad</h3>";
 
         //Enviamos los datos a nuestra base de datos de peliculas.
-        $sql = "INSERT INTO peliculas(id_pelicula, titulo, fecha_estreno, edad_recomendada) /* Si va el orden correcto, no hace falta especificar las columnas */
-            VALUES ($id_pelicula,'$titulo_pelicula','$fecha_estreno','$calificacion_edad')";
+        $sql = "INSERT INTO peliculas(id_pelicula, titulo, fecha_estreno, edad_recomendada, imagen) /* Si va el orden correcto, no hace falta especificar las columnas */
+            VALUES ($id_pelicula,'$titulo_pelicula','$fecha_estreno','$calificacion_edad', '$ruta_final')";
+
         $conexion -> query($sql);
+
+    }else{
+
+        echo "No se ha insertado el valor";
     }
     ?>
     <!-- Importamos bootstrap online -->

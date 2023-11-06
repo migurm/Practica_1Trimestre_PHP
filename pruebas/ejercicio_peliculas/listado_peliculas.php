@@ -23,6 +23,7 @@
                     <th>Título</th>
                     <th>Fecha estreno</th>
                     <th>Edad recomendada</th>
+                    <th>Imagen</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +34,11 @@
             echo "<td>".$fila["titulo"]."</td>";
             echo "<td>".$fila["fecha_estreno"]."</td>";
             echo "<td>".$fila["edad_recomendada"]."</td>";
+            echo "<td>";
+            ?>
+                <img width="50" height="100" src="<?php echo $fila["imagen"] ?>">
+            <?php
+            echo "</td>";
             echo "</tr>";
         } 
         ?>
