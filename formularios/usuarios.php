@@ -12,55 +12,35 @@
 <body>
 	<?php
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
+
 		$temp_nombre_usuario = depurar($_POST["nombre_usuario"]);
 		$temp_contrasena_usuario = depurar($_POST["contrasena_usuario"]);
 		$temp_fecha_nacimiento = depurar($_POST["fecha_nacimiento"]);
 
-		if(strlen($_POST["fecha_nacimiento"]) == 0){//Nos aseguramos de que haya input como mínimo
-			$err_fecha_nacimiento = "La fecha de nacimiento es obligatoria";
-		}else{
-			$temp_fecha_nacimiento = $_POST["fecha_nacimiento"];
-		}
+		
 	//Comprobamos nombre usuario.
-	if(strlen($temp_nombre_usuario) == 0){
-		$err_nombre_usuario = "El nombre de usuario es obligatorio";
-	}else if(strlen($temp_nombre_usuario) < 4){
-		$err_nombre_usuario = "El nombre de usuario debe tener al menos 4 caracteres";
-	}else if (strlen($temp_nombre_usuario) > 12){
-		$err_nombre_usuario = "El nombre de usuario debe tener como máximo 12 caracteres";
-	}else if (!carac_barraBaja($temp_nombre_usuario)){
-		$err_nombre_usuario ="El nombre solo puede contener letras y barras bajas ( _ )";
-	}else{
+	if(strlen(validar_nombre_usuario($temp_nombre_usuario)) == 0){
 		$nombre_usuario = $temp_nombre_usuario;
-	}
-	
-	//Controlamos la contraseña
-	if(strlen($temp_contrasena_usuario) == 0){
-		$err_contrasena_usuario = "La contraseña es obligatoria";
-	}else if(strlen($temp_contrasena_usuario) > 255){
-		$err_contrasena_usuario = "La contraseña no puede exceder los 255 caracteres";
-	}else{ //
-		$contrasena_usuario = password_hash($temp_contrasena_usuario, PASSWORD_DEFAULT);
+	}else{
+		$err_nombre_usuario= validar_nombre_usuario($temp_nombre_usuario);
 	}
 
-	//Controlamos la fecha
-	if(strlen($temp_fecha_nacimiento) == 0){
-		$err_fecha_nacimiento = "La fecha de nacimiento es obligatoria";
-	}else if (!formato_date($temp_fecha_nacimiento)){
-		$err_fecha_nacimiento = "El formato de fecha debe ser AAAA/MM/DD";
+
+	//Controlamos la contraseña
+	if(strlen(validar_contrasena_usuario($temp_contrasena_usuario)) == 0){
+		$contrasena_usuario = password_hash($temp_contrasena_usuario, PASSWORD_DEFAULT);
 	}else{
-		$fecha_introducida = new DateTime($temp_fecha_nacimiento);
-		$fecha_actual = new DateTime(date('Y-m-d'));
-		$diferencia = $fecha_actual -> diff($fecha_introducida);
-		$years = $diferencia -> y;
-		if ($years < 12){
-			$err_fecha_nacimiento = "Los menores de 12 años no pueden registrarse";
-		}else if ($years > 120){
-			$err_fecha_nacimiento = "Desgraciadamente, aun no podemos vivir más de 120 años";
-		}else{
-			$fecha_nacimiento = $temp_fecha_nacimiento;
-		}
+		$err_contrasena_usuario = validar_contrasena_usuario($temp_contrasena_usuario);
 	}
+
+
+	//Controlamos la fecha de nacimiento
+	if(strlen(validar_fecha_nacimiento($temp_fecha_nacimiento, 120, 12)) == 0){
+		$fecha_nacimiento = $temp_fecha_nacimiento;
+	}else{
+		$err_fecha_nacimiento = validar_fecha_nacimiento($temp_fecha_nacimiento, 120, 12);
+	}
+
 
 	}
 	?>
@@ -88,7 +68,7 @@
 		</fieldset>
 	</form>
 	<?php
-	if((isset($nombre_usuario))&& ($contrasena_usuario) && ($fecha_nacimiento)){
+	if((isset($nombre_usuario))&& isset($contrasena_usuario) && isset($fecha_nacimiento)){
 			echo "<p>Usuario registrado exitosamente.</p>";
 
 		$sql = "INSERT INTO usuarios (usuario, contrasena, fechaNacimiento)
