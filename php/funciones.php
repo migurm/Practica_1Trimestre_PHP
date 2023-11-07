@@ -1,4 +1,7 @@
+<?php require "../php/base_de_datos.php" ?> 
+
 <?php
+
 //BLOQUE PARA FUNCIONES
 function depurar($entrada) {
         $salida = htmlspecialchars($entrada);
@@ -30,6 +33,8 @@ detalladamente el error en el dato, o volver vacías, de volver vacías, damos e
 
 //Nombre de usuario
 function validar_nombre_usuario(String $temp_nombre_usuario): String {
+    //Comprobaremos si ya existe este nombre
+    global $conexion;
 
     if(strlen($temp_nombre_usuario) == 0){
         return "El nombre de usuario es obligatorio.";
@@ -39,6 +44,14 @@ function validar_nombre_usuario(String $temp_nombre_usuario): String {
         return "El nombre de usuario debe tener como máximo 12 caracteres.";
     }else if(!carac_barraBaja($temp_nombre_usuario)){
         return "El nombre solo puede contener letras y barras bajas.";
+    }else{
+        //¿Existe en la bbdd?
+        $consulta = "SELECT * FROM usuarios WHERE usuario = '$temp_nombre_usuario'";
+        $resultado = $conexion->query($consulta);
+
+        if($resultado->num_rows > 0) {
+            return "Este nombre de usuario ya está ocupado, prueba con otro.";
+        }
     }
 
     return "";

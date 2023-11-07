@@ -51,34 +51,39 @@
 	}
 
 	?>
-	<form action="" method="POST">
-		<fieldset>
-			<legend>
-				Productos
-			</legend>
-			<label>
-				Nombre del producto:
-			</label>
-			<input type="text" name="nombre_producto">
-			<?php if(isset($err_nombre_producto)) echo "<p>$err_nombre_producto</p>" ?>
-			<label>
-				Precio: 
-			</label>
-			<input type="text" name="precio_producto">
-			<?php if(isset($err_precio_producto)) echo "<p>$err_precio_producto</p>" ?>
-			<label>
-				Descripción:
-			</label>
-			<input type="text" name="descripcion_producto">
-			<?php if(isset($err_descripcion_producto)) echo "<p>$err_descripcion_producto</p>" ?>
-			<label>
-				Cantidad:
-			</label>
-			<input type="text" name="cantidad_producto">
-			<?php if(isset($err_cantidad_producto)) echo "<p>$err_cantidad_producto</p>" ?>
-			<input type="submit" value="Registrar">
-		</fieldset>
-	</form>
+	<div class="container mt-5">
+		<form action="" method="POST">
+			<fieldset>
+				<legend>Nuevo producto</legend>
+
+				<div class="form-group">
+					<label for="nombre_producto">Nombre del producto:</label>
+					<input type="text" class="form-control" id="nombre_producto" name="nombre_producto">
+					<?php if(isset($err_nombre_producto)) echo "<p class='text-danger'>$err_nombre_producto</p>"; ?>
+				</div>
+
+				<div class="form-group">
+					<label for="precio_producto">Precio:</label>
+					<input type="text" class="form-control" id="precio_producto" name="precio_producto">
+					<?php if(isset($err_precio_producto)) echo "<p class='text-danger'>$err_precio_producto</p>"; ?>
+				</div>
+
+				<div class="form-group">
+					<label for="descripcion_producto">Descripción:</label>
+					<input type="text" class="form-control" id="descripcion_producto" name="descripcion_producto">
+					<?php if(isset($err_descripcion_producto)) echo "<p class='text-danger'>$err_descripcion_producto</p>"; ?>
+				</div>
+
+				<div class="form-group">
+					<label for="cantidad_producto">Cantidad:</label>
+					<input type="text" class="form-control" id="cantidad_producto" name="cantidad_producto">
+					<?php if(isset($err_cantidad_producto)) echo "<p class='text-danger'>$err_cantidad_producto</p>"; ?>
+				</div>
+
+				<input type="submit" class="btn btn-primary mt-2" value="Registrar">
+			</fieldset>
+		</form>
+	</div>
 	<?php
 		if((isset($nombre_producto))&& ($precio_producto) && ($descripcion_producto) && ($cantidad_producto)){
 			echo "<p>Producto registrado exitosamente.</p>";
