@@ -123,7 +123,7 @@ function validar_cantidad_producto(String $temp_cantidad_producto): String {
         return "La cantidad de productos es obligatoria";
     }else if(!is_numeric($temp_cantidad_producto)){
         return "Debe introducir un número";
-    }else if(!int_val($temp_cantidad_producto)){
+    }else if(!filter_var($temp_cantidad_producto, FILTER_VALIDATE_INT)){
         return "Debe ser un número entero";
     }else if((int)$temp_cantidad_producto < 0){
         return "No se pueden introducir cantidades negativas";
@@ -132,22 +132,6 @@ function validar_cantidad_producto(String $temp_cantidad_producto): String {
     }
     return "";
 }
-
-
-
-
-if(strlen($temp_cantidad_producto) == 0){
-    $err_cantidad_producto = "Debe introducir una cantidad";
-}else if(!is_numeric($temp_cantidad_producto)){
-    $err_cantidad_producto = "Debe introducir una cantidad numérica.";
-}else if((int)$temp_cantidad_producto < 0){
-    $err_cantidad_producto = "Debe introducir una cantidad mayor a cero";
-}else if((int)$temp_cantidad_producto > 99999){
-    $err_cantidad_producto = "La cantidad no puede exceder 99.999 unidades";
-}else{
-    $cantidad_producto = (int)($temp_cantidad_producto);
-}
-
 
 
 
