@@ -12,58 +12,41 @@
 <body>
 	<?php
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
+		//Por defecto, todo espacio innecesario intermedio será eliminado antes de nada cuando proceda
 		$temp_nombre_producto = espacios_intermedios(depurar($_POST["nombre_producto"]));
 		$temp_precio_producto = depurar($_POST["precio_producto"]);
 		$temp_descripcion_producto = espacios_intermedios(depurar($_POST["descripcion_producto"]));
 		$temp_cantidad_producto = depurar($_POST["cantidad_producto"]);
 		
 		//Controlamos el nombre del producto.
-		if(strlen($temp_nombre_producto) == 0){
-			$err_nombre_producto = "El nombre es obligatorio.";
-		}else if(strlen($temp_nombre_producto) > 40){
-			$err_nombre_producto = "El nombre del producto no puede exceder los 40 caracteres";
-		}else if(!carac_num_espacios($temp_nombre_producto)){
-			$err_nombre_producto = "El nombre solo puede contener números, letras y espacios en blanco.";
-		}else{
+		if(strlen(validar_nombre_producto($temp_nombre_producto)) == 0){
 			$nombre_producto = $temp_nombre_producto;
+		}else{
+			$err_nombre_producto = validar_nombre_producto($temp_nombre_producto);
 		}
 
 		//Controlamos el precio.
-		if(strlen($temp_precio_producto) == 0){
-			$err_precio_producto = "El precio es obligatorio";
-		}else if(!is_numeric($temp_precio_producto)){
-			$err_precio_producto = "El precio debe ser un número";
-		}else if((float)$temp_precio_producto < 0){
-			$err_precio_producto = "El precio mínimo es 0";
-		}else if((float)$temp_precio_producto > 99999.99){
-			$err_precio_producto ="El precio no puede exceder 99999.99";
-		}else{
+		if(strlen(validar_precio_producto($temp_precio_producto)) == 0){
 			$precio_producto = (float)$temp_precio_producto;
+		}else{
+			$err_precio_producto = validar_precio_producto($temp_precio_producto);
 		}
 
+
 		//Controlamos la descripcion del producto
-		if(strlen($temp_descripcion_producto) == 0){
-			$err_descripcion_producto = "La descripción del producto es obligatoria";
-		}else if(strlen($temp_descripcion_producto) > 255){
-			$err_descripcion_producto = "La descripción no puede exceder de 255 caracteres";
-		}else{
+		if(strlen(validar_descripcion_producto($temp_descripcion_producto)) == 0){
 			$descripcion_producto = $temp_descripcion_producto;
+		}else{
+			$err_descripcion_producto = validar_descripcion_producto($temp_descripcion_producto);
 		}
 
 		//Controlamos la cantidad de producto
-		if(strlen($temp_cantidad_producto) == 0){
-			$err_cantidad_producto = "Debe introducir una cantidad";
-		}else if(!is_numeric($temp_cantidad_producto)){
-			$err_cantidad_producto = "Debe introducir una cantidad numérica.";
-		}else if((int)$temp_cantidad_producto < 0){
-			$err_cantidad_producto = "Debe introducir una cantidad mayor a cero";
-		}else if((int)$temp_cantidad_producto > 99999){
-			$err_cantidad_producto = "La cantidad no puede exceder 99.999 unidades";
+		if(strlen(validar_cantidad_producto($temp_cantidad_producto)) == 0){
+			$cantidad_producto = (int)$temp_cantidad_producto;
 		}else{
-			$cantidad_producto = (int)($temp_cantidad_producto);
+			$err_cantidad_producto = validar_cantidad_producto($temp_cantidad_producto);
 		}
 
-		
 
 	}
 

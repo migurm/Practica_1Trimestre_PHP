@@ -25,6 +25,8 @@ function formato_date($entrada){
 ?>
 <?php
 //BLOQUE PARA VALIDACIONES
+/* Explicación, estas validaciones van a devolver una cadena, esta cadena puede contener
+detalladamente el error en el dato, o volver vacías, de volver vacías, damos el dato por bueno */
 
 //Nombre de usuario
 function validar_nombre_usuario(String $temp_nombre_usuario): String {
@@ -74,8 +76,77 @@ function validar_fecha_nacimiento(String $temp_fecha_nacimiento, int $maximo, in
     return "";
 }
 
+//Validación del nombre del producto
+
+function validar_nombre_producto(String $temp_nombre_producto): String {
+    if(strlen($temp_nombre_producto) == 0){
+        return "El nombre es obligatorio";
+    }else if(strlen($temp_nombre_producto) > 40){
+        return "El nombre del producto no puede exceder los 40 caracteres";
+    }else if(!carac_num_espacios($temp_nombre_producto)){
+        return "El nombre del producto solo puede contener números, letras y espacios en blanco";
+    }
+    return "";
+}
+
+//Validación precio del producto
+
+function validar_precio_producto(String $temp_precio_producto): String {
+    if(strlen($temp_precio_producto) == 0){
+        return "El precio del producto es obligatorio";
+    }else if(!is_numeric($temp_precio_producto)){
+        return "El precio debe ser un número";
+    }else if((float)$temp_precio_producto < 0){
+        return "El precio mínimo es 0";
+    }else if((float)$temp_precio_producto > 99999.99){
+        return "El precio no puede exceder los 99.999,99€";
+    }
+    return "";
+}
 
 
+//Validación de la descripción del producto
+
+function validar_descripcion_producto(String $temp_descripcion_producto): String {
+    if(strlen($temp_descripcion_producto) == 0){
+        return "La descripción del producto es obligatoria";
+    }else if(strlen($temp_descripcion_producto) > 255){
+        return "La descripción del producto no puede exceder los 255 caracteres";
+    }
+    return "";
+}
+
+//Validación de la cantidad de producto
+
+function validar_cantidad_producto(String $temp_cantidad_producto): String {
+    if(strlen($temp_cantidad_producto) == 0){
+        return "La cantidad de productos es obligatoria";
+    }else if(!is_numeric($temp_cantidad_producto)){
+        return "Debe introducir un número";
+    }else if(!int_val($temp_cantidad_producto)){
+        return "Debe ser un número entero";
+    }else if((int)$temp_cantidad_producto < 0){
+        return "No se pueden introducir cantidades negativas";
+    }else if((int)$temp_cantidad_producto > 99999){
+        return "La cantidad no puede exceder las 99.999 unidades";
+    }
+    return "";
+}
+
+
+
+
+if(strlen($temp_cantidad_producto) == 0){
+    $err_cantidad_producto = "Debe introducir una cantidad";
+}else if(!is_numeric($temp_cantidad_producto)){
+    $err_cantidad_producto = "Debe introducir una cantidad numérica.";
+}else if((int)$temp_cantidad_producto < 0){
+    $err_cantidad_producto = "Debe introducir una cantidad mayor a cero";
+}else if((int)$temp_cantidad_producto > 99999){
+    $err_cantidad_producto = "La cantidad no puede exceder 99.999 unidades";
+}else{
+    $cantidad_producto = (int)($temp_cantidad_producto);
+}
 
 
 
