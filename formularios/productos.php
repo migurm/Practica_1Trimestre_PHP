@@ -47,12 +47,29 @@
 			$err_cantidad_producto = validar_cantidad_producto($temp_cantidad_producto);
 		}
 
+		//Validamos la imagen
+		//No parece muy exhaustivo
+
+		//Recibir un fichero con $_FILES ["combreCampo"]["queQueremosCoger"] -> TYPE, NAME, SIZE, TMP_NAME
+		//TMP_NAME es una especie de ruta temporal donde se aloja la imagen hasta saber que hacer con ella
+		//Sacar el nombre del fichero.
+		$nombre_imagen = $_FILES["imagen"]["name"];
+		echo $nombre_imagen;
+		$tipo_imagen = $_FILES["imagen"]["type"];
+		$tamano_imagen = $_FILES["imagen"]["size"];
+		$ruta_temporal = $_FILES["imagen"]["tmp_name"];
+
+		//El size dividido en 1024 nos da los megabytes
+
+		//Para guardar la imagen.
+		$ruta_final = "../imagenes/".$nombre_imagen;
+		move_uploaded_file($ruta_temporal, $ruta_final);
 
 	}
 
 	?>
 	<div class="container mt-5">
-		<form action="" method="POST">
+		<form action="" method="POST" enctype="multipart/form-data">
 			<fieldset>
 				<legend>Nuevo producto</legend>
 
@@ -79,17 +96,22 @@
 					<input type="text" class="form-control" id="cantidad_producto" name="cantidad_producto">
 					<?php if(isset($err_cantidad_producto)) echo "<p class='text-danger'>$err_cantidad_producto</p>"; ?>
 				</div>
+				<!-- Agregamos la petición de imágenes -->
+				<div class="form-group">
+                    <label class="form-label">Imagen</label>
+                    <input class="form-control" type="file" name="imagen">
+                </div>
 
 				<input type="submit" class="btn btn-primary mt-2" value="Registrar">
 			</fieldset>
 		</form>
 	</div>
 	<?php
-		if((isset($nombre_producto))&& ($precio_producto) && ($descripcion_producto) && ($cantidad_producto)){
+		if((isset($nombre_producto))&& isset($precio_producto) && isset($descripcion_producto) && isset($cantidad_producto)){
 			echo "<p>Producto registrado exitosamente.</p>";
 
-		$sql = "INSERT INTO productos (nombreProducto, precio, descripcion, cantidad)
-            VALUES ('$nombre_producto', '$precio_producto', '$descripcion_producto', '$cantidad_producto')";
+		$sql = "INSERT INTO productos (nombreProducto, precio, descripcion, cantidad, imagen)
+            VALUES ('$nombre_producto', '$precio_producto', '$descripcion_producto', '$cantidad_producto', '$ruta_final')";
 
         $conexion -> query($sql);
     }
