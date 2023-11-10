@@ -15,15 +15,24 @@
 
     if(isset($_SESSION["usuario"])){
         $usuario = $_SESSION["usuario"];
-    }else {         
+    }else{
         //header('location: iniciar_sesion.php'); O mandamos a otra página
         //O le llamamos al usuario invitado
         $usuario = $_SESSION["usuario"] = "invitado";
     }
+
     ?>
     <div class="container">
         <h1>Página principal</h1>
         <h2>Bienvenid@ <?php echo $usuario ?></h2>
+
+        <!--  Enlace a cierre de sesión -->
+
+        <a href="cerrar_sesion.php">Cerrar sesión</a>
+
+        <!-- Enlace a iniciar sesion -->
+
+        <a href=""></a>
     </div>
     <div>
         <?php
