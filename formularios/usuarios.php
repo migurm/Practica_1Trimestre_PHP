@@ -17,7 +17,6 @@
 		$temp_contrasena_usuario = depurar($_POST["contrasena_usuario"]);
 		$temp_fecha_nacimiento = depurar($_POST["fecha_nacimiento"]);
 
-
 	//Comprobamos nombre usuario.
 	if(strlen(validar_nombre_usuario($temp_nombre_usuario)) == 0){
 		$nombre_usuario = $temp_nombre_usuario;
