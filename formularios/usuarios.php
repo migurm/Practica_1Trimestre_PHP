@@ -23,7 +23,6 @@
 	}else{
 		$err_nombre_usuario= validar_nombre_usuario($temp_nombre_usuario);
 	}
-	
 
 	//Controlamos la contraseña
 	if(strlen(validar_contrasena_usuario($temp_contrasena_usuario)) == 0){
@@ -32,14 +31,12 @@
 		$err_contrasena_usuario = validar_contrasena_usuario($temp_contrasena_usuario);
 	}
 
-
 	//Controlamos la fecha de nacimiento
 	if(strlen(validar_fecha_nacimiento($temp_fecha_nacimiento, 120, 12)) == 0){
 		$fecha_nacimiento = $temp_fecha_nacimiento;
 	}else{
 		$err_fecha_nacimiento = validar_fecha_nacimiento($temp_fecha_nacimiento, 120, 12);
 	}
-
 
 	}
 	?>
