@@ -1,4 +1,4 @@
-<?php require "../php/base_de_datos.php" ?> 
+<?php require "../util/base_de_datos.php" ?> 
 
 <?php
 
@@ -15,7 +15,6 @@ function espacios_intermedios($entrada){
 //True ->compuesto por numeros, letras, eñes y espacios
 function carac_num_espacios($entrada){
     return preg_match('/^[a-zA-ZñÑáÁéÉíÍóÓúÚ 0-9]{0,40}$/', $entrada);
-
 };
 
 function carac_barraBaja($entrada){
