@@ -9,7 +9,9 @@
     <?php require "../util/funciones.php" ?>
 </head>
 <body>
+
     <?php
+    include 'cabecera.php';
     if($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $usuario = $_POST["usuario"];

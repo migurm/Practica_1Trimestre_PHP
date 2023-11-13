@@ -12,6 +12,7 @@
 <body>
 
 	<?php
+	include 'cabecera.php';
 	    session_start();
 
 	if(isset($_SESSION["usuario"])){//Si tenemos una sesión iniciada
@@ -72,7 +73,6 @@
 		//TMP_NAME es una especie de ruta temporal donde se aloja la imagen hasta saber que hacer con ella
 		//Sacar el nombre del fichero.
 		$nombre_imagen = $_FILES["imagen"]["name"];
-		echo $nombre_imagen;
 		$tipo_imagen = $_FILES["imagen"]["type"];
 		$tamano_imagen = $_FILES["imagen"]["size"];
 		$ruta_temporal = $_FILES["imagen"]["tmp_name"];

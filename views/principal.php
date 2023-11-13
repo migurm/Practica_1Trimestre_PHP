@@ -11,6 +11,7 @@
 </head>
 <body>
     <?php
+    include 'cabecera.php';
     session_start();
 
     if(isset($_SESSION["usuario"])){
@@ -33,6 +34,8 @@
         <!-- Enlace a iniciar sesion -->
 
         <a href=""></a>
+
+        
     </div>
     <div>
         <?php
@@ -49,6 +52,7 @@
                     <th>Descripcion</th>
                     <th>Cantidad</th>
                     <th>Imagen</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -61,25 +65,21 @@
 
                     array_push($productos, $nuevo_producto);
                 } 
-                foreach($productos as $producto){ 
-                    echo "<tr>";
-                    echo "<td>".$producto -> id_producto."</td>";
-                    echo "<td>".$producto -> nombre_producto."</td>";
-                    echo "<td>".$producto -> precio_producto."</td>";
-                    echo "<td>".$producto -> descripcion."</td>";
-                    echo "<td>".$producto -> cantidad."</td>";
-                    echo "<td>"
-
-                    ?>
-                    <img width="50" height="100" src="<?php echo $producto -> imagen ?>">
-                    <td>
-                        <form action="" method="post">
-                            <input class="btn btn-warning" type="submit" value="Añadir">
-                        </form>
-                    </td>
+                foreach($productos as $producto){ ?>
+                    <tr>
+                        <td><?php echo $producto -> id_producto ?></td>
+                        <td><?php echo $producto -> nombre_producto ?></td>
+                        <td><?php echo $producto -> precio_producto ?></td>
+                        <td><?php echo $producto -> descripcion ?></td>
+                        <td><?php echo $producto -> cantidad ?></td>
+                        <td><img width="50" height="100" src="<?php echo $producto -> imagen ?>"></td>
+                        <td>
+                            <form action="" method="post">
+                                <input class="btn btn-warning" type="submit" value="Añadir">
+                            </form>
+                        </td>
+                    </tr>
                 <?php
-                    echo "</td>";
-                    echo "</tr>";
                 }
                 ?>
             </tbody>
