@@ -60,9 +60,7 @@
                     $fila["cantidad"], $fila["imagen"]);
 
                     array_push($productos, $nuevo_producto);
-
                 } 
-
                 foreach($productos as $producto){ 
                     echo "<tr>";
                     echo "<td>".$producto -> id_producto."</td>";
