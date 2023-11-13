@@ -63,7 +63,7 @@
 
                 } 
 
-                foreach($productos as $producto){
+                foreach($productos as $producto){ 
                     echo "<tr>";
                     echo "<td>".$producto -> id_producto."</td>";
                     echo "<td>".$producto -> nombre_producto."</td>";
@@ -74,6 +74,11 @@
 
                     ?>
                     <img width="50" height="100" src="<?php echo $producto -> imagen ?>">
+                    <td>
+                        <form action="" method="post">
+                            <input class="btn btn-warning" type="submit" value="Añadir">
+                        </form>
+                    </td>
                 <?php
                     echo "</td>";
                     echo "</tr>";

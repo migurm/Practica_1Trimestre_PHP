@@ -10,7 +10,25 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer></script>
 </head>
 <body>
+
 	<?php
+	    session_start();
+
+	if(isset($_SESSION["usuario"])){//Si tenemos una sesión iniciada
+			$usuario = $_SESSION["usuario"];
+			$rol = $_SESSION["rol"];
+			if($rol != 'admin'){
+				session_start();
+                $_SESSION["usuario"] = $usuario;
+                header('location: login.php');
+			}
+
+	}else{
+		//header('location: iniciar_sesion.php'); O mandamos a otra página
+		//O le llamamos al usuario invitado
+		$usuario = $_SESSION["usuario"] = "invitado";
+	}
+ 
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 		//Por defecto, todo espacio innecesario intermedio será eliminado antes de nada cuando proceda
 		$temp_nombre_producto = espacios_intermedios(depurar($_POST["nombre_producto"]));

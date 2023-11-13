@@ -17,7 +17,6 @@
         $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
         $resultado = $conexion -> query($sql);
 
-
         if($resultado -> num_rows === 0) { 
         ?>
             <div class="alert alert-danger" role="alert">
@@ -30,6 +29,7 @@
 
                 $contrasena_cifrada = $fila["contrasena"];
 
+                $rol = $fila["rol"];
             }
 
             $acceso_valido = password_verify($contrasena, $contrasena_cifrada);
@@ -38,7 +38,7 @@
                 echo "NOS HEMOS LOGEADO CON ÉXITO";
                 session_start();
                 $_SESSION["usuario"] = $usuario;
-                
+                $_SESSION["rol"] = $rol;
                 header('location: principal.php');
             } else {
                 echo "LA CONTRASEÑA ESTÁ MAL";
