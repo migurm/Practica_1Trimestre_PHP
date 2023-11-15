@@ -75,6 +75,10 @@
             VALUES ('$nombre_usuario', '$contrasena_usuario', '$fecha_nacimiento')";
 
         $conexion -> query($sql);
+
+		$sql2 = "INSERT INTO cestas (usuario) VALUES ('$nombre_usuario')";
+
+		$conexion -> query($sql2);
     }
 	?>
     

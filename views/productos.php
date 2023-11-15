@@ -132,6 +132,7 @@
             VALUES ('$nombre_producto', '$precio_producto', '$descripcion_producto', '$cantidad_producto', '$ruta_final')";
 
         $conexion -> query($sql);
+
     }
 	
 	?>
