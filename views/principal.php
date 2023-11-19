@@ -11,7 +11,6 @@
 </head>
 <body>
     <?php
-    include 'cabecera.php';
     session_start();
 
     if(isset($_SESSION["usuario"])){
@@ -69,7 +68,7 @@
                     <tr>
                         <td><?php echo $producto -> id_producto ?></td>
                         <td><?php echo $producto -> nombre_producto ?></td>
-                        <td><?php echo $producto -> precio_producto ?></td>
+                        <td><?php echo $producto -> precio_producto ?> €</td>
                         <td><?php echo $producto -> descripcion ?></td>
                         <td><?php echo $producto -> cantidad ?></td>
                         <td><img width="50" height="100" src="<?php echo $producto -> imagen ?>"></td>

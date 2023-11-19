@@ -12,7 +12,6 @@
 <body>
 
 	<?php
-	include 'cabecera.php';
 	    session_start();
 
 	if(isset($_SESSION["usuario"])){//Si tenemos una sesión iniciada
