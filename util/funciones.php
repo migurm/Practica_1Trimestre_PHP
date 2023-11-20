@@ -30,7 +30,7 @@ function formato_date($entrada){
 /* Explicación, estas validaciones van a devolver una cadena, esta cadena puede contener
 detalladamente el error en el dato, o volver vacías, de volver vacías, damos el dato por bueno */
 
-//Nombre de usuario
+//Nombare de usuario
 function validar_nombre_usuario(String $temp_nombre_usuario): String {
     //Comprobaremos si ya existe este nombre
     global $conexion;
@@ -144,7 +144,27 @@ function validar_cantidad_producto(String $temp_cantidad_producto): String {
     }
     return "";
 }
+?>
 
+<?php
+//BLOQUE PARA CONSULTAS EN LA BBDD
 
+//Valor de la cesta de un usuario.
 
+function valor_cesta($usuario){
+    global $conexion;
+
+    $consulta = "SELECT precioTotal FROM cestas WHERE usuario = '$usuario'";
+
+    $resultado = $conexion->query($consulta);
+
+    if(!$resultado){
+        die("Error en la consulta: ". $conexion->error);
+    }
+
+    $fila = $resultado->fetch_assoc();
+    $valor = $fila['precioTotal'];
+
+    return $valor;
+}
 ?>

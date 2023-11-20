@@ -14,24 +14,26 @@
     session_start();
 
     if(isset($_SESSION["usuario"])){
+
         $usuario = $_SESSION["usuario"];
+        $valorCesta = valor_cesta($usuario);
+
     }else{
         //header('location: iniciar_sesion.php'); O mandamos a otra página
         //O le llamamos al usuario invitado
         $usuario = $_SESSION["usuario"] = "invitado";
+        $valorCesta = 0.00;
     }
 
     ?>
     <div class="container">
         <h1>Página principal</h1>
         <h2>Bienvenid@ <?php echo $usuario ?></h2>
-
+        <h3>Cesta: <?php echo $valorCesta ?></h3>
         <!--  Enlace a cierre de sesión -->
-
         <a href="cerrar_sesion.php">Cerrar sesión</a>
 
         <!-- Enlace a iniciar sesion -->
-
         <a href=""></a>
 
         
@@ -52,6 +54,7 @@
                     <th>Cantidad</th>
                     <th>Imagen</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -71,12 +74,22 @@
                         <td><?php echo $producto -> precio_producto ?> €</td>
                         <td><?php echo $producto -> descripcion ?></td>
                         <td><?php echo $producto -> cantidad ?></td>
-                        <td><img width="50" height="100" src="<?php echo $producto -> imagen ?>"></td>
-                        <td>
-                            <form action="" method="post">
+                        <td><img width="80" height="100" src="<?php echo $producto -> imagen ?>"></td>
+                        <form action="" method="post">
+                            <td>
+                                <select name="cantidad">
+                                <?php
+                                    for($i = 1; $i <= 5; $i++){
+                                        echo "<option value='$i'>$i</option>";
+                                    }    
+                                ?>
+                                </select>
+                            </td>
+                            <td>
                                 <input class="btn btn-warning" type="submit" value="Añadir">
-                            </form>
-                        </td>
+                            </td>
+                        </form>
+ 
                     </tr>
                 <?php
                 }
