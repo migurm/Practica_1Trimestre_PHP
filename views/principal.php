@@ -28,7 +28,7 @@
 
     <?php //Gestiones de agregar artículos a la cesta.
     //En primer lugar, si el usuario es invitado, le vamos a avisar de que tiene que registrarse para hacer compras.
-    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar_a_carrito"])&& $usuario != "invitado"){
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar_a_carrito"]) && $usuario != "invitado"){
         $id_producto = depurar($_POST["id_producto"]);//Las inyecciones de sql mejor que no
         $cantidad = depurar($_POST["cantidad"]);
 

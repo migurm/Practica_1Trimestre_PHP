@@ -292,5 +292,19 @@ function agregar_a_carrito($id_producto, $cantidad, $usuario){
 
 }
 
+//Función para devolver la cesta de un usuario.
+function asigna_cesta($usuario){
+    global $conexion;
+
+    $consulta_cesta = "SELECT idCesta FROM cestas WHERE usuario = '$usuario'";
+    $resultado = $conexion->query($consulta_cesta);
+
+    if($resultado)
+        return $resultado->fetch_assoc();
+    else
+        die("Error en la consulta: ". $conexion->error);
+
+}
+
 
 ?>

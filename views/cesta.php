@@ -11,11 +11,20 @@
 <body>
     <?php //Gestiones de inicio de sesión si lo hay.
         session_start();
-        if(isset($_SESSION["usuario"])){
+        if(isset($_SESSION["usuario"]) && $_SESSION["usuario"] != "invitado"){
             $usuario = $_SESSION["usuario"];
+            $cesta = asigna_cesta($usuario);//Ya tiene su id de cesta, ahora podemos extraer los datos
         }else{
             header('location: login.php'); 
         }
+    ?>
+    <?php
+    //Las variables que vamos a usar en esta pagina
+    $sumatorioPrecio = 0;
+    //Creamos un objeto para mostrar todos los elementos de manera mas sencilla
+    //Vamos a por esos datos ;)
+    $productos_cestas = productos_cestas_array($cesta);
+
     ?>
     <div class="container mt-5">
         <h1>Mi cesta</h1>
@@ -27,9 +36,9 @@
                             <img src="" alt="aquí iria la imagen" class="mr-3" style="width: 100px; height: 100px;">
                             <div>
                                 <p class="mb-1">Nombre del Producto</p>
-                                <p class="mb-1">Cantidad: 2</p>
-                                <p class="mb-1">Precio Unitario: $20.00</p>
-                                <p class="mb-1">Subtotal: $40.00</p>
+                                <p class="mb-1">Precio (1ud): 2</p>
+                                <p class="mb-1">Unidades: 5</p>
+                                <p class="mb-1">Subtotal: 10</p>
                             </div>
                         </div>
                     </div>
