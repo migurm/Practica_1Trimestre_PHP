@@ -10,11 +10,10 @@
     <?php require "../util/Producto.php" ?>
 </head>
 <body>
-    <?php
+
+    <?php //Gestiones de inicio de sesión si lo hay.
     session_start();
-
     if(isset($_SESSION["usuario"])){
-
         $usuario = $_SESSION["usuario"];
         $valorCesta = valor_cesta($usuario);
 
@@ -24,11 +23,26 @@
         $usuario = $_SESSION["usuario"] = "invitado";
         $valorCesta = 0.00;
     }
-
     ?>
+
+    <?php //Gestiones de agregar artículos a la cesta.
+    //En primer lugar, si el usuario es invitado, le vamos a avisar de que tiene que registrarse para hacer compras.
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar_a_carrito"])){
+        $id_producto = depurar($_POST["id_producto"]);//Las inyecciones de sql mejor que no
+        $cantidad = depurar($_POST["cantidad"]);
+
+        if(stock_correcto($id_producto, $cantidad)){
+            echo "<h2>Tenemos stock!!</h2>";
+        }else{
+            echo "<h2>No tenemos stock memo</h2>";
+        }
+    }
+    ?>
+
+
     <div class="container">
         <h1>Página principal</h1>
-        <h2>Bienvenid@ <?php echo $usuario ?></h2>
+        <h2>Usuari@: <?php echo $usuario ?></h2>
         <h3>Cesta: <?php echo $valorCesta ?></h3>
         <!--  Enlace a cierre de sesión -->
         <a href="cerrar_sesion.php">Cerrar sesión</a>
@@ -45,14 +59,14 @@
         ?>
 
         <table class="table table-hover">
-            <thead class="table table-dark">
+            <thead class="table table-dark text-center">
                 <tr>
                     <th>ID</th>
                     <th>Artículo</th>
                     <th>Precio</th>
                     <th>Descripcion</th>
-                    <th>Cantidad</th>
-                    <th>Imagen</th>
+                    <th>En almacén</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -68,7 +82,7 @@
                     array_push($productos, $nuevo_producto);
                 } 
                 foreach($productos as $producto){ ?>
-                    <tr>
+                    <tr class="text-center align-middle">
                         <td><?php echo $producto -> id_producto ?></td>
                         <td><?php echo $producto -> nombre_producto ?></td>
                         <td><?php echo $producto -> precio_producto ?> €</td>
@@ -76,6 +90,7 @@
                         <td><?php echo $producto -> cantidad ?></td>
                         <td><img width="80" height="100" src="<?php echo $producto -> imagen ?>"></td>
                         <form action="" method="post">
+                            <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
                             <td>
                                 <select name="cantidad">
                                 <?php
@@ -86,7 +101,7 @@
                                 </select>
                             </td>
                             <td>
-                                <input class="btn btn-warning" type="submit" value="Añadir">
+                                <input class="btn btn-warning" type="submit" name="agregar_a_carrito" value="Añadir">
                             </td>
                         </form>
  

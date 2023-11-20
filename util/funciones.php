@@ -167,4 +167,23 @@ function valor_cesta($usuario){
 
     return $valor;
 }
+
+//Comprobación de que tenemos stock suficiente
+function stock_correcto($id_producto, $cantidad){
+    global $conexion;
+
+    $consulta = "SELECT cantidad FROM productos WHERE idProducto = '$id_producto'";
+    $resultado = $conexion->query($consulta);
+
+    if($resultado && $fila = $resultado->fetch_assoc()){
+        $stock_actual = $fila['cantidad'];
+
+        if($stock_actual >= $cantidad)
+            return true;
+        else
+            return false;
+    }else{
+        return false;
+    }
+}
 ?>
