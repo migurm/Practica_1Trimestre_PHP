@@ -1,8 +1,8 @@
 # Tienda en Línea - Proyecto de Desarrollo Web Entorno Cliente
 
-![Tienda en Línea](https://tu_url_imagen.com/tienda.png)
+![Tienda en Línea]([https://tu_url_imagen.com/tienda.png](https://www.dongee.com/tutoriales/content/images/size/w1000/2023/01/image-65.png))
 
-Un proyecto impresionante de tienda en línea como parte de la asignatura "Desarrollo Web Entorno Cliente". Esta tienda utiliza una variedad de tecnologías para brindar una experiencia de compra en línea completa y atractiva.
+Un proyecto de tienda en línea como parte de la asignatura "Desarrollo Web Entorno Servidor". Esta tienda utiliza una variedad de tecnologías para brindar una experiencia de compra en línea completa y atractiva.
 
 ## Vista Previa
 
@@ -25,7 +25,3 @@ Un proyecto impresionante de tienda en línea como parte de la asignatura "Desar
 - **MySQL:** Para la base de datos de productos y usuarios.
 
 ## Capturas de Pantalla
-
-![Captura de Pantalla 1](https://tu_url_imagen.com/captura1.png)
-
-![Captura de Pantalla 2](https://tu_url_imagen.com/captura2.png)
