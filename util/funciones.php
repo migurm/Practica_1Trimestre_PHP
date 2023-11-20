@@ -186,4 +186,60 @@ function stock_correcto($id_producto, $cantidad){
         return false;
     }
 }
+
+
+//Función dependiente de agregar_a_carrito(), toma los parametros necesarios y resta al stock la cantidad insertada en el carrito
+function restar_stock($id_producto, $cantidad){
+    global $conexion;
+
+    $orden_resta = "UPDATE productos SET cantidad = cantidad - $cantidad WHERE idProducto = $id_producto";
+
+    if($conexion->query($orden_resta) === TRUE){
+        echo "Stock actualizado";
+    }else{
+        $conexion->error;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+//Agregar un producto al carrito, y restar esas unidades al stock
+function agregar_a_carrito($id_producto, $cantidad, $usuario){
+    global $conexion;
+    //Lo primero es obtener el precio del producto de la BBDD
+    $consulta_precio = "SELECT precio FROM productos WHERE idProducto = '$id_producto'";
+
+    $temp_precio_producto = $conexion->query($consulta_precio);
+
+    if($temp_precio_producto && $fila_precio = $temp_precio_producto->fetch_assoc()){
+        $precio_producto = $fila_precio['precio'];
+
+        //Calculamos el precio total de la selección del usuario
+        $precio_total = $cantidad * $precio_producto;
+
+        //Actualizamos la suma del valor total de la cesta.
+        $orden_actualizar = "UPDATE cestas SET precioTotal = precioTotal + $precio_total WHERE usuario = '$usuario'";
+
+        $conexion->query($orden_actualizar);
+        restar_stock($id_producto, $cantidad);
+
+        header("Location: principal.php");
+        exit();
+
+    }else{
+        //No se pudo :( 
+    }
+
+}
+
+
 ?>

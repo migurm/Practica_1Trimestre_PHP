@@ -33,6 +33,7 @@
 
         if(stock_correcto($id_producto, $cantidad)){
             echo "<h2>Tenemos stock!!</h2>";
+            agregar_a_carrito($id_producto, $cantidad, $usuario);
         }else{
             echo "<h2>No tenemos stock memo</h2>";
         }
