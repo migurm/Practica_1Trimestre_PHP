@@ -25,6 +25,17 @@
     //Vamos a por esos datos ;)
     $array_productos_cestas = productos_cestas_array($cesta);
     ?>
+    <?php //Gestionamos los formularios-botones
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+        if(isset($_POST["eliminar_producto"])){
+            echo "<p>Eliminar un producto</p>";
+
+        }else if(isset($_POST["formalizar_pedido"])){
+            echo "<p>Formalizar el pedido</p>";
+        }
+    }
+    
+    ?>
 
 
 
@@ -47,7 +58,18 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-danger btn-eliminar">Eliminar</button>
+                    <form action="" method="POST">
+                        <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
+                        <select name="cantidad">
+                            <?php 
+                                for($i = 1; $i <= $producto->cantidad; $i++){
+                                    echo "<option value='$i'>$i</option>";
+                                }
+                            ?>
+                        </select>
+                        <button class="btn btn-danger btn-eliminar" name="eliminar_producto">Eliminar</button>
+
+                    </form>
                 </li>
             <?php
             }?>
@@ -69,31 +91,12 @@
                         <span class="badge bg-secondary"><?php echo number_format($sumatorioPrecio*1.21, 2) ?> €</span>
                     </li>
                 </ul>
-                <button class="btn btn-success btn-pago mt-3">Proceder al Pago</button>
+                <form action="" method="POST">
+                    <button class="btn btn-success btn-pago mt-3" name="formalizar_pedido">Formalizar pedido</button>
+                </form>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
-
-
-
-
-
-<form action="" method="post">
-                            <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
-                            <td>
-                                <select name="cantidad" <?php if($disponibles <= 0 || $usuario == "invitado")  echo 'disabled=true'?>>
-                                <?php
-                                    for($i = 1; $i <= 5; $i++){
-                                        echo "<option value='$i'>$i</option>";
-                                    }    
-                                ?>
-                                </select>
-                            </td>
-                            <td>
-                                <input class="btn btn-warning" type="submit" 
-                                <?php if($disponibles <= 0 || $usuario == "invitado") echo 'disabled=true' ?>name="agregar_a_carrito" value="Añadir">
-                            </td>
-                        </form>
