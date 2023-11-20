@@ -9,6 +9,14 @@
     <?php require "../util/funciones.php" ?>
 </head>
 <body>
+    <?php //Gestiones de inicio de sesión si lo hay.
+        session_start();
+        if(isset($_SESSION["usuario"])){
+            $usuario = $_SESSION["usuario"];
+        }else{
+            header('location: login.php'); 
+        }
+    ?>
     <div class="container mt-5">
         <h1>Mi cesta</h1>
         <div id="cesta">

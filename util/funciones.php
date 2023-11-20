@@ -166,7 +166,6 @@ function valor_cesta($usuario){
     global $conexion;
 
     $consulta = "SELECT precioTotal FROM cestas WHERE usuario = '$usuario'";
-
     $resultado = $conexion->query($consulta);
 
     if(!$resultado){
@@ -174,6 +173,14 @@ function valor_cesta($usuario){
     }
 
     $fila = $resultado->fetch_assoc();
+
+    if($fila !== NULL && isset($fila['precioTotal'])){
+        return $fila['precioTotal'];
+    }else{
+        return "0.00";
+    }
+
+
     $valor = $fila['precioTotal'];
 
     return $valor;
@@ -189,7 +196,7 @@ function stock_correcto($id_producto, $cantidad){
     if($resultado && $fila = $resultado->fetch_assoc()){
         $stock_actual = $fila['cantidad'];
 
-        if($stock_actual >= $cantidad)
+        if(intval($stock_actual) >= intval($cantidad)) //intval por si se encuentra un 0 y lo interpreta como NULL
             return true;
         else
             return false;

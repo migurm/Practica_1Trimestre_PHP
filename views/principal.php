@@ -13,6 +13,7 @@
 
     <?php //Gestiones de inicio de sesión si lo hay.
     session_start();
+
     if(isset($_SESSION["usuario"])){
         $usuario = $_SESSION["usuario"];
         $valorCesta = valor_cesta($usuario);
@@ -21,13 +22,13 @@
         //header('location: iniciar_sesion.php'); O mandamos a otra página
         //O le llamamos al usuario invitado
         $usuario = $_SESSION["usuario"] = "invitado";
-        $valorCesta = 0.00;
+        $valorCesta = "0.00";
     }
     ?>
 
     <?php //Gestiones de agregar artículos a la cesta.
     //En primer lugar, si el usuario es invitado, le vamos a avisar de que tiene que registrarse para hacer compras.
-    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar_a_carrito"])){
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar_a_carrito"])&& $usuario != "invitado"){
         $id_producto = depurar($_POST["id_producto"]);//Las inyecciones de sql mejor que no
         $cantidad = depurar($_POST["cantidad"]);
 
@@ -44,7 +45,7 @@
     <div class="container">
         <h1>Página principal</h1>
         <h2>Usuari@: <?php echo $usuario ?></h2>
-        <h3>Cesta: <?php echo $valorCesta ?></h3>
+        <h3>Cesta: <?php echo $valorCesta ?>€</h3>
         <!--  Enlace a cierre de sesión -->
         <a href="cerrar_sesion.php">Cerrar sesión</a>
 
@@ -98,7 +99,7 @@
                         <form action="" method="post">
                             <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
                             <td>
-                                <select name="cantidad" <?php if($disponibles <= 0) echo 'disabled=true' ?>>
+                                <select name="cantidad" <?php if($disponibles <= 0 || $usuario == "invitado")  echo 'disabled=true'?>>
                                 <?php
                                     for($i = 1; $i <= 5; $i++){
                                         echo "<option value='$i'>$i</option>";
@@ -108,7 +109,7 @@
                             </td>
                             <td>
                                 <input class="btn btn-warning" type="submit" 
-                                <?php if($disponibles <= 0) echo 'disabled=true' ?>name="agregar_a_carrito" value="Añadir">
+                                <?php if($disponibles <= 0 || $usuario == "invitado") echo 'disabled=true' ?>name="agregar_a_carrito" value="Añadir">
                             </td>
                         </form>
  
