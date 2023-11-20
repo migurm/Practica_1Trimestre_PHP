@@ -24,6 +24,17 @@ function carac_barraBaja($entrada){
 function formato_date($entrada){
     return preg_match('/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/', $entrada);
 }
+
+//Mostrar la disponibilidad de un artículo, si hay cero mostraremos fuera de stock
+function mostrar_disponibilidad($disponibles){
+    if ($disponibles <= 0)
+        return "<p style='color:red;'>Fuera de stock</p>";
+    else{
+        return $disponibles." disponibles";
+    }
+}
+
+
 ?>
 <?php
 //BLOQUE PARA VALIDACIONES

@@ -88,12 +88,17 @@
                         <td><?php echo $producto -> nombre_producto ?></td>
                         <td><?php echo $producto -> precio_producto ?> €</td>
                         <td><?php echo $producto -> descripcion ?></td>
-                        <td><?php echo $producto -> cantidad ?></td>
+                        <td><?php $disponibles = $producto->cantidad;//Mostraremos el stock de una manera u otra si hay o no
+                        echo mostrar_disponibilidad($disponibles);?></td>
+
+
+
+
                         <td><img width="80" height="100" src="<?php echo $producto -> imagen ?>"></td>
                         <form action="" method="post">
                             <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
                             <td>
-                                <select name="cantidad">
+                                <select name="cantidad" <?php if($disponibles <= 0) echo 'disabled=true' ?>>
                                 <?php
                                     for($i = 1; $i <= 5; $i++){
                                         echo "<option value='$i'>$i</option>";
@@ -102,7 +107,8 @@
                                 </select>
                             </td>
                             <td>
-                                <input class="btn btn-warning" type="submit" name="agregar_a_carrito" value="Añadir">
+                                <input class="btn btn-warning" type="submit" 
+                                <?php if($disponibles <= 0) echo 'disabled=true' ?>name="agregar_a_carrito" value="Añadir">
                             </td>
                         </form>
  
