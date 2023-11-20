@@ -186,6 +186,30 @@ function valor_cesta($usuario){
 
     return $valor;
 }
+//Comprobación de si la cantidad de producto que vamos a eliminar es correcta
+function cantidad_correcta($cesta, $id_producto, $cantidad_a_eliminar){
+    global $conexion;
+    //Primero vamos a buscar la cantidad de producto que tenemos en la cesta del usuario.
+    $consulta = "SELECT cantidad FROM productos_cestas WHERE idProducto = $id_producto AND idCesta = $cesta";
+    $resultado = $conexion->query($consulta);
+
+    if($resultado && $fila = $resultado->fetch_assoc()){
+        $cantidad_actual = $fila['cantidad'];
+        
+        if(intval($cantidad_actual) >= intval($cantidad_a_eliminar)){
+            return 1;
+        }else{
+            return 0;
+            echo "No se puede... buen intento ;)";
+        }
+    }else{
+        //ups
+        echo "No se rompen las páginas de los demas, por favor, esas manitas!!";
+        $conexion->error;
+        return 0;
+    }
+
+}
 
 //Comprobación de que tenemos stock suficiente
 function stock_correcto($id_producto, $cantidad){
@@ -300,12 +324,17 @@ function asigna_cesta($usuario){
     $consulta_cesta = "SELECT idCesta FROM cestas WHERE usuario = '$usuario'";
     $resultado = $conexion->query($consulta_cesta);
 
-    if($resultado)
-        return $resultado->fetch_assoc();
+    if($resultado){
+        $fila = $resultado->fetch_assoc();
+        return $fila['idCesta'];
+    }
     else
         die("Error en la consulta: ". $conexion->error);
-
 }
+
+
+
+
 //Funcion que, partiendo de una cesta (de su ID) nos va a devolver un array del objeto ProductoCesta, para colocarlos en la pagina cesta
 function productos_cestas_array($cesta){
     global $conexion;

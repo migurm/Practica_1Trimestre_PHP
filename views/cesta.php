@@ -26,12 +26,75 @@
     $array_productos_cestas = productos_cestas_array($cesta);
     ?>
     <?php //Gestionamos los formularios-botones
+    /*
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar_a_carrito"]) && $usuario != "invitado"){
+        $id_producto = depurar($_POST["id_producto"]);//Las inyecciones de sql mejor que no
+        $cantidad = depurar($_POST["cantidad"]);
+
+        if(stock_correcto($id_producto, $cantidad)){
+            echo "<h2>Tenemos stock!!</h2>";
+            agregar_a_carrito($id_producto, $cantidad, $usuario);
+        }else{
+            echo "<h2>No tenemos stock memo</h2>";
+        }
+    }
+    */
+
+
+
+
+
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         if(isset($_POST["eliminar_producto"])){
-            echo "<p>Eliminar un producto</p>";
+            //Botón de eliminar un producto de la cesta.
+            $id_producto = depurar($_POST["id_producto"]);
+            echo "Producto numero: ".$id_producto;
+            $cantidad_a_eliminar = depurar($_POST["cantidad"]);
+
+            //Podríamos comprobar aqui toooooooodos los objetos creados, y si algun valor no coincide con los que deberia
+            //No hacer absolutamente nada
+            //Tengo en esta pagina objetos con:
+            /*
+            $id_producto;
+            $nombre_producto;
+            $imagen;
+            $precio_unitario;
+            $cantidad;
+            $importe;
+            */
+            
+            if(cantidad_correcta(intval($cesta), $id_producto, $cantidad_a_eliminar)){
+                //Reestablecer el stock (sumar cantidad_a_eliminar a cantidad de tabla productos)
+                reestablecer_stock($id_producto, $cantidad_a_eliminar); //POR HACER
+                //Restar a la cantidad de productos_cestas la cantidad ingresada
+                restar_productos_cestas($id_producto, $cesta, $cantidad_a_eliminar); //POR HACER
+                //Restar a cestas el valor(cantidad ingresada * valor) de los productos retirados
+                restar_valor_cesta($cesta, $cantidad_a_eliminar, );
+
+
+
+
+            }
+            
+
+
+
+
+
+
+
+
+
+
 
         }else if(isset($_POST["formalizar_pedido"])){
             echo "<p>Formalizar el pedido</p>";
+
+
+
+
+
+
         }
     }
     
