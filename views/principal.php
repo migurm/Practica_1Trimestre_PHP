@@ -92,9 +92,6 @@
                         <td><?php $disponibles = $producto->cantidad;//Mostraremos el stock de una manera u otra si hay o no
                         echo mostrar_disponibilidad($disponibles);?></td>
 
-
-
-
                         <td><img width="80" height="100" src="<?php echo $producto -> imagen ?>"></td>
                         <form action="" method="post">
                             <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">

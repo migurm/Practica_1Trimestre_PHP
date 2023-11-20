@@ -1,4 +1,5 @@
 <?php require "../util/base_de_datos.php" ?> 
+<?php require "ProductoCesta.php" ?>
 
 <?php
 
@@ -303,6 +304,40 @@ function asigna_cesta($usuario){
         return $resultado->fetch_assoc();
     else
         die("Error en la consulta: ". $conexion->error);
+
+}
+//Funcion que, partiendo de una cesta (de su ID) nos va a devolver un array del objeto ProductoCesta, para colocarlos en la pagina cesta
+function productos_cestas_array($cesta){
+    global $conexion;
+
+    $array_productos = [];
+
+    $consulta_productos_cesta = "SELECT pc.idProducto, pc.cantidad, p.nombreProducto, p.imagen, p.precio
+                                    FROM productos_cestas pc JOIN productos p ON pc.idProducto = p.idProducto
+                                    WHERE pc.idCesta = 2;"; 
+    
+    $resultado_productos_cesta = $conexion->query($consulta_productos_cesta);
+
+    if ($fila = $resultado_productos_cesta->fetch_assoc()) {//Ha funcionado
+
+        while($fila = $resultado_productos_cesta -> fetch_assoc()){/* fetch_assoc() crea una especie de array asociativo con las filas*/
+            $nuevo_producto = new ProductoCesta (
+            $fila["idProducto"],
+            $fila["nombreProducto"], 
+            $fila["imagen"], 
+            $fila["precio"], 
+            $fila["cantidad"],
+            number_format($fila["cantidad"]*$fila["precio"], 2) // Almacenamos directamente la operacion, con formato de dos decimales.
+            );
+
+            array_push($array_productos, $nuevo_producto);
+        } 
+        return $array_productos;
+        
+    }else{
+        //A veces, la vida no es como queremos.
+        die("Error en la consulta: ". $conexion->error);
+    }
 
 }
 

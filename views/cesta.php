@@ -23,44 +23,50 @@
     $sumatorioPrecio = 0;
     //Creamos un objeto para mostrar todos los elementos de manera mas sencilla
     //Vamos a por esos datos ;)
-    $productos_cestas = productos_cestas_array($cesta);
-
+    $array_productos_cestas = productos_cestas_array($cesta);
     ?>
+
+
+
     <div class="container mt-5">
-        <h1>Mi cesta</h1>
-        <div id="cesta">
+        <h1 class="mb-4">Mi cesta</h1>
+        <div id="cesta" class="card">
             <ul class="list-group lista-productos">
-                <li class="list-gruop-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex justify-content-between align-items-center">
+            <?php
+            foreach($array_productos_cestas as $producto){
+                $sumatorioPrecio += ($producto->cantidad * $producto->precio_unitario);
+                ?>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
                         <div class="detalles-producto d-flex alignt-items-center">
-                            <img src="" alt="aquí iria la imagen" class="mr-3" style="width: 100px; height: 100px;">
-                            <div>
-                                <p class="mb-1">Nombre del Producto</p>
-                                <p class="mb-1">Precio (1ud): 2</p>
-                                <p class="mb-1">Unidades: 5</p>
-                                <p class="mb-1">Subtotal: 10</p>
+                            <img src="<?php echo $producto->imagen ?>" alt="aquí iria la imagen" class="mr-3" style="width: 80px; height: 100px;">
+                            <div class="d-flex flex-column justify-content-center align-items-center space">
+                                <p class="mb-1"><?php echo $producto->nombre_producto ?></p>
+                                <p class="mb-1">Precio (ud): <?php echo $producto->precio_unitario ?>€</p>
+                                <p class="mb-1">Cantidad: <?php echo $producto->cantidad ?></p>
                             </div>
                         </div>
                     </div>
                     <button class="btn btn-danger btn-eliminar">Eliminar</button>
                 </li>
-            <!-- Otros elementos de la lista de productos -->
+            <?php
+            }?>
             </ul>
 
-            <div id="total-cesta" class="mt-4">
-                <h5>Detalles de la cesta:</h5>
+            <div id="total-cesta" class="card-footer mt-4">
+                <h5 class="mb-3">Detalles de la cesta:</h5>
                 <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between aling-items-center">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
                         Subtotal
-                        <span class="badge bg-secondary">120€</span>
+                        <span class="badge bg-secondary"><?php echo number_format($sumatorioPrecio, 2) ?> €</span>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between aling-items-center">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
                         Impuestos
-                        <span class="badge bg-secondary">20€</span>
+                        <span class="badge bg-secondary">21%</span>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between aling-items-center">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
                         Total
-                        <span class="badge bg-secondary">120€</span>
+                        <span class="badge bg-secondary"><?php echo number_format($sumatorioPrecio*1.21, 2) ?> €</span>
                     </li>
                 </ul>
                 <button class="btn btn-success btn-pago mt-3">Proceder al Pago</button>
@@ -70,3 +76,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
+
+
+
+<form action="" method="post">
+                            <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
+                            <td>
+                                <select name="cantidad" <?php if($disponibles <= 0 || $usuario == "invitado")  echo 'disabled=true'?>>
+                                <?php
+                                    for($i = 1; $i <= 5; $i++){
+                                        echo "<option value='$i'>$i</option>";
+                                    }    
+                                ?>
+                                </select>
+                            </td>
+                            <td>
+                                <input class="btn btn-warning" type="submit" 
+                                <?php if($disponibles <= 0 || $usuario == "invitado") echo 'disabled=true' ?>name="agregar_a_carrito" value="Añadir">
+                            </td>
+                        </form>
