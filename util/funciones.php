@@ -212,7 +212,40 @@ function restar_stock($id_producto, $cantidad){
     }
 
 }
+//Función dependiende de agragar_a_carrito(), toma los parámetros necesarios y realiza inserciones en productos_cestas
+function agrega_productos_cestas($id_producto, $cantidad, $usuario){
+    global $conexion;
 
+    //Necesitamos la cesta del usuario.
+    $consulta_cesta = "SELECT idCesta FROM cestas WHERE usuario = '$usuario'";
+    $temp_cesta = $conexion->query($consulta_cesta);
+    //Necesitamos comprobar si ya estaba ese producto en la cesta o no.
+
+   
+    if($temp_cesta && $fila_cesta = $temp_cesta->fetch_assoc()){
+        $id_cesta = $fila_cesta['idCesta'];
+
+        //Comprobamos si ya estaba este producto en la cesta determinada del usuario.
+        $consulta_existencia = "SELECT * FROM productos_cestas WHERE idProducto ='$id_producto' AND idCesta = '$id_cesta'";
+        $temp_existencia_anterior = $conexion->query($consulta_existencia);
+
+        if($temp_existencia_anterior->num_rows == 0){
+            //Esto quiere decir que el producto NO está en la cesta, lo insertamos tal cual entonces.
+            $orden_insertar = "INSERT INTO productos_cestas VALUES ('$id_producto', '$id_cesta', '$cantidad')";
+            $conexion->query($orden_insertar);
+        }else{
+            //El producto ya se encontraba en la cesta que estamos gestionando, entonces solo aumentaremos la cantidad.
+            $orden_incrementar_cantidad = "UPDATE productos_cestas SET cantidad = cantidad + $cantidad WHERE idProducto = '$id_producto' AND idCesta = '$id_cesta'";
+
+            $conexion->query($orden_incrementar_cantidad);
+
+        }
+
+        //Insertamos los valores.
+
+    }
+
+}
 
 
 
@@ -242,7 +275,7 @@ function agregar_a_carrito($id_producto, $cantidad, $usuario){
 
         $conexion->query($orden_actualizar);
         restar_stock($id_producto, $cantidad);
-
+        agrega_productos_cestas($id_producto, $cantidad, $usuario);
         header("Location: principal.php");
         exit();
 
