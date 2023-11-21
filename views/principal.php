@@ -13,6 +13,17 @@
 
     <?php //Gestiones de inicio de sesión si lo hay.
     session_start();
+    $sql = "SELECT * FROM productos";
+    $resultado = $conexion -> query($sql);
+
+    $productos = [];
+    while($fila = $resultado -> fetch_assoc()){/* fetch_assoc() crea una especie de array asociativo con las filas*/
+        $nuevo_producto = new Producto ($fila["idProducto"], $fila["nombreProducto"], 
+        $fila["precio"], $fila["descripcion"], 
+        $fila["cantidad"], $fila["imagen"]);
+
+        array_push($productos, $nuevo_producto);
+    } 
 
     if(isset($_SESSION["usuario"])){
         $usuario = $_SESSION["usuario"];
@@ -35,12 +46,14 @@
     if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar_a_carrito"]) && $usuario != "invitado"){
         $id_producto = depurar($_POST["id_producto"]);//Las inyecciones de sql mejor que no
         $cantidad = depurar($_POST["cantidad"]);
+        //Tendríamos que recorrer el array de objetos, para ver si ha metido un id de producto que se encuentra en la pagina
+        //Y con una cantidad a añadir dentro de lo posible (podria haber usado el select y ya)
 
-        if(stock_correcto($id_producto, $cantidad)){
+        if((stock_correcto($id_producto, $cantidad)) && (comprobar_datos($id_producto, $cantidad, $productos))){
             echo "<h2>Tenemos stock!!</h2>";
             agregar_a_carrito($id_producto, $cantidad, $usuario);
         }else{
-            echo "<h2>No tenemos stock, nice try</h2>";
+            echo "<h2>no.. me toques las tablas que me conozcoo!</h2>";
         }
     }
     ?>
@@ -55,8 +68,7 @@
                     <li>
                         <span class="nav-link"><?php echo $usuario; ?></span>
                     </li>
-                    <?php
-                        
+                    <?php 
                         if(isset($rol) && ($rol === "admin")){
                             echo "<li class='nav-item'>";
                             echo"<a class='nav-link' href='productos.php'>AGREGAR PRODUCTOS</a></li>";
@@ -68,31 +80,29 @@
                     </li>
                     <li class="nav-item">
                         <?php
-                        if($usuario == "invitado"){
-                            echo "<a class='nav-link' href='cerrar_sesion.php'>Cerrar sesión</a>"; //En todas las paginas siempre se mostrará
+                        if($usuario == "invitado"){ 
                             echo "<a class='nav-link' href='login.php'>Iniciar sesion</a>";
                         }else{
-                            echo "<a class='nav-link' href='login.php'>Iniciar sesion</a>";
+                            echo "<a class='nav-link' href='login.php'>Cambiar usuario</a>";
                             echo "</li><li class='nav-item'>";
                             echo "<a class='nav-link' href='usuarios.php'>Regístrese</a>";
                         }
                         
                         ?>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cerrar_sesion.php">Cerrar sesión</a>
+                    </li>
+
                 </ul>
             </div>
         </div>
     </nav>
     <div class="jumbotron text-center">
-        <h2 class="display-4">Bienvenido a libros para programar</h2>
-        <p class="lead">Observe nuestra amplia selección de libros, adaptados a todos los niveles, desde <b>sumar</b> a <b>machine learning</b></p>
+        <h2 class="display-4">Bienvenido a tu librería</h2>
+        <p class="lead">Observe nuestra amplia selección de libros, adaptados a todos los niveles, desde <b>sumar</b> a <b>machine learning.</b></p>
     </div>
     <div>
-        <?php
-        $sql = "SELECT * FROM productos";
-        $resultado = $conexion -> query($sql);
-        ?>
-
         <table class="table table-hover">
             <thead class="table table-dark text-center">
                 <tr>
@@ -108,43 +118,39 @@
             </thead>
             <tbody>
                 <?php
-                $productos = [];
-                while($fila = $resultado -> fetch_assoc()){/* fetch_assoc() crea una especie de array asociativo con las filas*/
-                    $nuevo_producto = new Producto ($fila["idProducto"], $fila["nombreProducto"], 
-                    $fila["precio"], $fila["descripcion"], 
-                    $fila["cantidad"], $fila["imagen"]);
+                if(empty($productos)){
+                    echo "<h3>No disponemos de artículos por ahora...</h3>";
+                }else{
+                    foreach($productos as $producto){ ?>
+                        <tr class="text-center align-middle">
+                            <td><?php echo $producto -> id_producto ?></td>
+                            <td><?php echo $producto -> nombre_producto ?></td>
+                            <td><?php echo $producto -> precio_producto ?> €</td>
+                            <td><?php echo $producto -> descripcion ?></td>
+                            <td><?php $disponibles = $producto->cantidad;//Mostraremos el stock de una manera u otra si hay o no
+                            echo mostrar_disponibilidad($disponibles);?></td>
 
-                    array_push($productos, $nuevo_producto);
-                } 
-                foreach($productos as $producto){ ?>
-                    <tr class="text-center align-middle">
-                        <td><?php echo $producto -> id_producto ?></td>
-                        <td><?php echo $producto -> nombre_producto ?></td>
-                        <td><?php echo $producto -> precio_producto ?> €</td>
-                        <td><?php echo $producto -> descripcion ?></td>
-                        <td><?php $disponibles = $producto->cantidad;//Mostraremos el stock de una manera u otra si hay o no
-                        echo mostrar_disponibilidad($disponibles);?></td>
-
-                        <td><img width="80" height="100" src="<?php echo $producto -> imagen ?>"></td>
-                        <form action="" method="post">
-                            <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
-                            <td>
-                                <select name="cantidad" <?php if($disponibles <= 0 || $usuario == "invitado")  echo 'disabled=true'?>>
-                                <?php
-                                    for($i = 1; $i <= 5; $i++){
-                                        echo "<option value='$i'>$i</option>";
-                                    }    
-                                ?>
-                                </select>
-                            </td>
-                            <td>
-                                <input class="btn btn-warning" type="submit" 
-                                <?php if($disponibles <= 0 || $usuario == "invitado") echo 'disabled=true' ?>name="agregar_a_carrito" value="Añadir">
-                            </td>
-                        </form>
- 
-                    </tr>
-                <?php
+                            <td><img width="80" height="100" src="<?php echo $producto -> imagen ?>"></td>
+                            <form action="" method="post">
+                                <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
+                                <td>
+                                    <select name="cantidad" <?php if($disponibles <= 0 || $usuario == "invitado")  echo 'disabled=true'?>>
+                                    <?php
+                                        for($i = 1; $i <= 5; $i++){
+                                            echo "<option value='$i'>$i</option>";
+                                        }    
+                                    ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input class="btn btn-warning" type="submit" 
+                                    <?php if($disponibles <= 0 || $usuario == "invitado") echo 'disabled=true' ?>name="agregar_a_carrito" value="Añadir">
+                                </td>
+                            </form>
+    
+                        </tr>
+                    <?php
+                    }
                 }
                 ?>
             </tbody>

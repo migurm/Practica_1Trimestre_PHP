@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,6 @@
     <?php require "../util/funciones.php" ?>
 </head>
 <body>
-    <a href="principal.php">Volver a tienda</a>
     <?php //Gestiones de inicio de sesión si lo hay.
         session_start();
         if(isset($_SESSION["usuario"]) && $_SESSION["usuario"] != "invitado"){
@@ -35,9 +34,6 @@
             echo "Producto numero: ".$id_producto."<br>";
             $cantidad_a_eliminar = depurar($_POST["cantidad"]);
             $cantidad = depurar($_POST["cantidad_inicial"]);
-
-            echo "ID Producto: $id_producto, Cantidad: $cantidad, Cantidad a Eliminar: $cantidad_a_eliminar<br>";
-
             if(comprobar_valores($array_productos_cestas, intval($id_producto), intval($cantidad), intval($cantidad_a_eliminar))){
                 echo"No lo has modificado<br>";
                 if(cantidad_correcta(intval($cesta), $id_producto, $cantidad_a_eliminar)){
@@ -52,22 +48,15 @@
             }else{
                 echo "Está feo modificar los formularios ajenos!";
             }
-
-
-
         }else if(isset($_POST["formalizar_pedido"])){
             echo "<p>Formalizar el pedido</p>";
             //Vale, aquí nos da igual si se ha tocado la web con el inspeccionar
             //Nuestra materia prima es el array de ProductoCesta.
             formalizar_pedido($array_productos_cestas, $usuario, $cesta);
-
-
-
-
-
+            header("Location: ".$_SERVER['PHP_SELF']);
+            exit();
         }
     }
-    
     ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -78,10 +67,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href='principal.php'>Entrar como invitado</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href='usuarios.php'>¿Eres nuev@? Regístrese</a>
+                        <a class="nav-link" href='principal.php'>Volver a tienda</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href='cerrar_sesion.php'>Cerrar sesión</a>
@@ -142,11 +128,11 @@
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         Impuestos
-                        <span class="badge bg-secondary">21%</span>
+                        <span class="badge bg-secondary">0%</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         Total
-                        <span class="badge bg-secondary"><?php echo number_format($sumatorioPrecio*1.21, 2) ?> €</span>
+                        <span class="badge bg-secondary"><?php echo number_format($sumatorioPrecio, 2) ?> €</span>
                     </li>
                 </ul>
                 <form action="" method="POST">

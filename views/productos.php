@@ -144,7 +144,6 @@
 	</div>
 	<?php
 		if((isset($nombre_producto))&& isset($precio_producto) && isset($descripcion_producto) && isset($cantidad_producto) && isset($ruta_final)){
-			echo "<p>Producto registrado exitosamente.</p>";
 			echo "<div class='alert alert-success mt-3' role='alert'>";
 			echo "<strong>¡Producto añadido con éxito!</strong> Todos los campos están correctos.";
 			echo "</div>";
