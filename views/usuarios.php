@@ -12,6 +12,10 @@
 		body{
 			background-color: #f2f2f2;
 		}
+		#togglePassword {
+			font-size: 14px;
+			margin-top: 8px;
+		}
 	</style>
 </head>
 <body>
@@ -79,6 +83,7 @@
 							<div class="mb-3">
 								<label for="contrasena_usuario">Contraseña:</label>
 								<input type="text" class="form-control" id="contrasena_usuario" name="contrasena_usuario">
+								<button class="btn btn-outline-secondary" type="button" id="togglePassword">Ocultar</button>
 								<?php if(isset($err_contrasena_usuario)) echo "<p class='text-danger'>$err_contrasena_usuario</p>"; ?>
 							</div>
 								
@@ -97,7 +102,9 @@
 	</div>
 	<?php
 	if((isset($nombre_usuario))&& isset($contrasena_usuario) && isset($fecha_nacimiento)){
-			echo "<p>Usuario registrado exitosamente.</p>";
+			echo "<div class='alert alert-success mt-3' role='alert'>";
+			echo "<strong>¡Registro completado con éxito!</strong> Todo ha salido bien en el registro.";
+			echo "</div>";
 
 		$sql = "INSERT INTO usuarios (usuario, contrasena, fechaNacimiento)
             VALUES ('$nombre_usuario', '$contrasena_usuario', '$fecha_nacimiento')";
@@ -109,6 +116,19 @@
 		$conexion -> query($sql2);
     }
 	?>
-    
+    <script>
+		document.getElementById('togglePassword').addEventListener('click', function(){
+			var passwordInput = document.getElementById('contrasena_usuario');
+			var boton = document.getElementById('tooglePassword');
+
+			if(passwordInput.type === 'password'){
+				passwordInput.type = 'text';
+				button.textContent = 'Ocultar';
+			}else{
+				passwordInput.type = 'password';
+				button.textContent = 'Mostrar';
+			}
+		});
+	</script>
 </body>
 </html>

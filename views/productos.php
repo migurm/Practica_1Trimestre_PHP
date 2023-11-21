@@ -71,6 +71,7 @@
 		//Recibir un fichero con $_FILES ["combreCampo"]["queQueremosCoger"] -> TYPE, NAME, SIZE, TMP_NAME
 		//TMP_NAME es una especie de ruta temporal donde se aloja la imagen hasta saber que hacer con ella
 		//Sacar el nombre del fichero.
+		
 		$nombre_imagen = $_FILES["imagen"]["name"];
 		$tipo_imagen = $_FILES["imagen"]["type"];
 		$tamano_imagen = $_FILES["imagen"]["size"];

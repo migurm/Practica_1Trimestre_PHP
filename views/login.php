@@ -45,7 +45,7 @@
         if($resultado -> num_rows === 0) { 
         ?>
             <div class="alert alert-danger mt-3" role="alert">
-                El usuario no existe
+                <strong>Error: </strong>El usuario no existe.
             </div>
         <?php
         } else {
@@ -66,7 +66,11 @@
                 $_SESSION["rol"] = $rol;
                 header('location: principal.php');
             } else {
-                echo "LA CONTRASEÑA ESTÁ MAL";
+                ?>
+                <div class="alert alert-danger mt-3" role="alert">
+                    <strong>Error: </strong>La contraseña es incorrecta.
+                </div>
+                <?php
             }
         }
     }
