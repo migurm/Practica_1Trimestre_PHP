@@ -68,8 +68,8 @@
                     </li>
                     <li class="nav-item">
                         <?php
-                        if($usuario != "invitado"){
-                            echo "<a class='nav-link' href='cerrar_sesion.php'>Cerrar sesión</a>";
+                        if($usuario == "invitado"){
+                            echo "<a class='nav-link' href='cerrar_sesion.php'>Cerrar sesión</a>"; //En todas las paginas siempre se mostrará
                         }else{
                             echo "<a class='nav-link' href='login.php'>Iniciar sesion</a>";
                             echo "</li><li class='nav-item'>";

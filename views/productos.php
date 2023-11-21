@@ -71,18 +71,17 @@
 		//Recibir un fichero con $_FILES ["combreCampo"]["queQueremosCoger"] -> TYPE, NAME, SIZE, TMP_NAME
 		//TMP_NAME es una especie de ruta temporal donde se aloja la imagen hasta saber que hacer con ella
 		//Sacar el nombre del fichero.
-		
-		$nombre_imagen = $_FILES["imagen"]["name"];
-		$tipo_imagen = $_FILES["imagen"]["type"];
-		$tamano_imagen = $_FILES["imagen"]["size"];
-		$ruta_temporal = $_FILES["imagen"]["tmp_name"];
+		if(strlen(validar_imagen($_FILES["imagen"])) == 0){
+			$nombre_imagen = depurar($_FILES["imagen"]["name"]);
+			$tipo_imagen = depurar($_FILES["imagen"]["type"]);
+			$tamano_imagen = depurar($_FILES["imagen"]["size"]);
+			$ruta_temporal = depurar($_FILES["imagen"]["tmp_name"]);
 
-		//El size dividido en 1024 nos da los megabytes
-
-		//Para guardar la imagen.
-		$ruta_final = "images/".$nombre_imagen;
-		move_uploaded_file($ruta_temporal, $ruta_final);
-
+			$ruta_final = "images/".$nombre_imagen;
+			move_uploaded_file($ruta_temporal, $ruta_final);
+		}else{
+			$err_imagen = validar_imagen($_FILES["imagen"]);
+		}
 	}
 
 	?>
@@ -136,6 +135,7 @@
 				<div class="form-group">
                     <label class="form-label">Imagen</label>
                     <input class="form-control" type="file" name="imagen">
+					<?php if(isset($err_imagen)) echo "<p class='text-danger'>$err_imagen</p>"; ?>
                 </div>
 
 				<input type="submit" class="btn btn-primary mt-2" value="Registrar">
@@ -143,15 +143,17 @@
 		</form>
 	</div>
 	<?php
-		if((isset($nombre_producto))&& isset($precio_producto) && isset($descripcion_producto) && isset($cantidad_producto)){
+		if((isset($nombre_producto))&& isset($precio_producto) && isset($descripcion_producto) && isset($cantidad_producto) && isset($ruta_final)){
 			echo "<p>Producto registrado exitosamente.</p>";
+			echo "<div class='alert alert-success mt-3' role='alert'>";
+			echo "<strong>¡Producto añadido con éxito!</strong> Todos los campos están correctos.";
+			echo "</div>";
 
 		$sql = "INSERT INTO productos (nombreProducto, precio, descripcion, cantidad, imagen)
             VALUES ('$nombre_producto', '$precio_producto', '$descripcion_producto', '$cantidad_producto', '$ruta_final')";
 
         $conexion -> query($sql);
-
-    }
+    	}
 	
 	?>
     

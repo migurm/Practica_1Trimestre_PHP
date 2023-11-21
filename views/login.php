@@ -28,6 +28,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href='usuarios.php'>¿Eres nuev@? Regístrese</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href='cerrar_sesion.php'>Cerrar sesión</a>
+                    </li>
                 </ul>
             </div>
         </div>

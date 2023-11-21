@@ -177,6 +177,36 @@ function validar_cantidad_producto(String $temp_cantidad_producto): String {
     }
     return "";
 }
+
+//Validación de imágenes
+function validar_imagen($imagen):String {
+    $formatos_correctos = ["image/jpg", "image/jpeg", "image/png"];
+    $tam_maximo = 1048576;
+
+    if(strlen(depurar($imagen["name"])) == 0){
+        return "Este campo es obligatorio";
+    }else if(!in_array($imagen["type"], $formatos_correctos)){
+        return "Sólo aceptamos jpg, jpeg y png";
+    }else if($imagen["size"] > $tam_maximo){
+        return "El tamaño máximo para una foto es de 1MB.";
+    }
+    global $conexion;
+    $temp_nombre_imagen = depurar($imagen["name"]);
+    $consulta_nombre_imagen = "SELECT imagen FROM productos WHERE imagen = 'images/$temp_nombre_imagen'";
+    $resultado = $conexion->query($consulta_nombre_imagen);
+
+    if($resultado){//No se ha roto la bbdd.
+        if($resultado->num_rows > 0){
+            return "Ya existe una imagen con el mismo nombre";
+        }else{
+            return "";
+        }
+    }else{
+        $conexion->error;
+        return "Error al realizar la consulta";
+    }
+}
+
 ?>
 
 <?php
