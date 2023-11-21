@@ -68,6 +68,27 @@ function validar_nombre_usuario(String $temp_nombre_usuario): String {
     return "";
 }
 
+//Contraseña del usuario parte BONUS
+function validar_contrasena_usuario_bonus(String $temp_contrasena_usuario): String {
+    $exp_reg = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]+$/';
+    /*
+    ^ Inicio de la cadena
+    (?=.*[a-z]) -> al menos una minúscula en cualquier posición
+    (?=.*[A-Z]) -> al menos una mayúscula en cualquier posición
+    (?=.*\d) -> al menos un dígito (0-9) en cualquier posición
+    (?=.*[!@#$%^&*()-_+=]) -> mínimo un caracter especial de estos !@#$%^&*()-_+=
+    [A-Za-z\d!@#$%^&*()-_+=]+ -> La secuencia que debe seguir, no vamos a comprobar el tamaño, porque ya lo comprobamos antes
+    $ Fin de la cadena
+    */
+
+    if(strlen($temp_contrasena_usuario) < 8 || strlen($temp_contrasena_usuario) > 20){
+        return "La contraseña debe tener entre 8 y 20 caracteres";
+    }else if(!preg_match($exp_reg, $temp_contrasena_usuario)){
+        return "La contraseña debe contener una mayúscula, una minúscula, un número, y un caracter especial.";
+    }
+    return "";
+}
+
 //Contraseña del usuario
 function validar_contrasena_usuario(String $temp_contrasena_usuario): String {
     if(strlen($temp_contrasena_usuario) == 0){

@@ -48,10 +48,10 @@
 	}
 
 	//Controlamos la contraseña
-	if(strlen(validar_contrasena_usuario($temp_contrasena_usuario)) == 0){
+	if(strlen(validar_contrasena_usuario_bonus($temp_contrasena_usuario)) == 0){
 		$contrasena_usuario = password_hash($temp_contrasena_usuario, PASSWORD_DEFAULT);
 	}else{
-		$err_contrasena_usuario = validar_contrasena_usuario($temp_contrasena_usuario);
+		$err_contrasena_usuario = validar_contrasena_usuario_bonus($temp_contrasena_usuario);
 	}
 
 	//Controlamos la fecha de nacimiento
