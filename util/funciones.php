@@ -493,15 +493,17 @@ function formalizar_pedido($array_productos_cestas, $usuario, $cesta){
         if($conexion -> query($orden_crear_pedido)){//Necesitamos el id del pedido que se acaba de autogenerar
             $id_pedido = $conexion->insert_id; //MAGIA
         }
+        $lineaPedido = 1;
         //Ahora recorremos el array de objetos, por cada uno, haremos la inserción que se pide.
         foreach($array_productos_cestas as $producto){
-            $nueva_insercion = "INSERT INTO lineas_pedidos (idProducto, idPedido, precioUnitario, cantidad)
-                                VALUES($producto->id_producto, $id_pedido, $producto->precio_unitario, $producto->cantidad)";
+            $nueva_insercion = "INSERT INTO lineas_pedidos (lineaPedido, idProducto, idPedido, precioUnitario, cantidad)
+                                VALUES($lineaPedido, $producto->id_producto, $id_pedido, $producto->precio_unitario, $producto->cantidad)";
             
             if($conexion->query($nueva_insercion) === FALSE) {
                 echo "Error en el foreach de inserciones de la funcion formalizar pedido: ".$conexion->error;
                 break; //En caso de error, salimos del bucle e indicamos el error.
             }
+            $lineaPedido++;
         }
         //Establecemos en 0 el valor de la cesta del usuario pasado por parámetro
         $orden_vaciar_cesta = "UPDATE cestas SET precioTotal = 0 WHERE usuario = '$usuario'";
