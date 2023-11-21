@@ -3,7 +3,7 @@
 
 <?php
 
-//BLOQUE PARA FUNCIONES
+//BLOQUE PARA FUNCIONES (Alguna son simplemente comprobaciónes de un determinado patron en una cadena)
 function depurar($entrada) {
         $salida = htmlspecialchars($entrada);
         $salida = trim($salida);
@@ -64,7 +64,6 @@ function validar_nombre_usuario(String $temp_nombre_usuario): String {
             return "Este nombre de usuario ya está ocupado, prueba con otro.";
         }
     }
-
     return "";
 }
 
@@ -96,7 +95,6 @@ function validar_contrasena_usuario(String $temp_contrasena_usuario): String {
     }else if(strlen($temp_contrasena_usuario) > 255){
         return "La contraseña no puede exceder los 255 caracteres";
     }
-
     return "";
 }
 
@@ -122,7 +120,6 @@ function validar_fecha_nacimiento(String $temp_fecha_nacimiento, int $maximo, in
 }
 
 //Validación del nombre del producto
-
 function validar_nombre_producto(String $temp_nombre_producto): String {
     if(strlen($temp_nombre_producto) == 0){
         return "El nombre es obligatorio";
@@ -135,7 +132,6 @@ function validar_nombre_producto(String $temp_nombre_producto): String {
 }
 
 //Validación precio del producto
-
 function validar_precio_producto(String $temp_precio_producto): String {
     if(strlen($temp_precio_producto) == 0){
         return "El precio del producto es obligatorio";
@@ -151,7 +147,6 @@ function validar_precio_producto(String $temp_precio_producto): String {
 
 
 //Validación de la descripción del producto
-
 function validar_descripcion_producto(String $temp_descripcion_producto): String {
     if(strlen($temp_descripcion_producto) == 0){
         return "La descripción del producto es obligatoria";
@@ -162,7 +157,6 @@ function validar_descripcion_producto(String $temp_descripcion_producto): String
 }
 
 //Validación de la cantidad de producto
-
 function validar_cantidad_producto(String $temp_cantidad_producto): String {
     if(strlen($temp_cantidad_producto) == 0){
         return "La cantidad de productos es obligatoria";
@@ -212,8 +206,7 @@ function validar_imagen($imagen):String {
 <?php
 //BLOQUE PARA CONSULTAS EN LA BBDD
 
-//Valor de la cesta de un usuario.
-
+// Funcion que nos va a dar el valor de la cesta de un usuario.
 function valor_cesta($usuario){
     global $conexion;
 
@@ -231,12 +224,10 @@ function valor_cesta($usuario){
     }else{
         return "0.00";
     }
-
-
     $valor = $fila['precioTotal'];
-
     return $valor;
 }
+
 //Comprobación de si la cantidad de producto que vamos a eliminar es correcta
 function cantidad_correcta($cesta, $id_producto, $cantidad_a_eliminar){
     global $conexion;
@@ -246,7 +237,7 @@ function cantidad_correcta($cesta, $id_producto, $cantidad_a_eliminar){
 
     if($resultado && $fila = $resultado->fetch_assoc()){
         $cantidad_actual = $fila['cantidad'];
-        
+        //Si la cantidad del producto es mayor o igual a la cantidad a eliminar lo damos por bueno
         if(intval($cantidad_actual) >= intval($cantidad_a_eliminar)){
             return 1;
         }else{
@@ -259,7 +250,6 @@ function cantidad_correcta($cesta, $id_producto, $cantidad_a_eliminar){
         $conexion->error;
         return 0;
     }
-
 }
 
 //Comprobación de que tenemos stock suficiente
@@ -304,7 +294,6 @@ function agrega_productos_cestas($id_producto, $cantidad, $usuario){
     $temp_cesta = $conexion->query($consulta_cesta);
     //Necesitamos comprobar si ya estaba ese producto en la cesta o no.
 
-   
     if($temp_cesta && $fila_cesta = $temp_cesta->fetch_assoc()){
         $id_cesta = $fila_cesta['idCesta'];
 
@@ -321,23 +310,10 @@ function agrega_productos_cestas($id_producto, $cantidad, $usuario){
             $orden_incrementar_cantidad = "UPDATE productos_cestas SET cantidad = cantidad + $cantidad WHERE idProducto = '$id_producto' AND idCesta = '$id_cesta'";
 
             $conexion->query($orden_incrementar_cantidad);
-
         }
-
         //Insertamos los valores.
-
     }
-
 }
-
-
-
-
-
-
-
-
-
 
 //Agregar un producto al carrito, y restar esas unidades al stock
 function agregar_a_carrito($id_producto, $cantidad, $usuario){
@@ -365,7 +341,6 @@ function agregar_a_carrito($id_producto, $cantidad, $usuario){
     }else{
         //No se pudo :( 
     }
-
 }
 
 //Función para devolver la cesta de un usuario.
@@ -382,9 +357,6 @@ function asigna_cesta($usuario){
     else
         die("Error en la consulta de la cesta: ". $conexion->error);
 }
-
-
-
 
 //Funcion que, partiendo de una cesta (de su ID) nos va a devolver un array del objeto ProductoCesta, para colocarlos en la pagina cesta
 function productos_cestas_array($cesta){
@@ -419,7 +391,6 @@ function productos_cestas_array($cesta){
 }
 
 //Funcion para comprobar que no se han alterado los datos en el formulario, tienen que coincidir con el objeto que se mostró
-
 function comprobar_valores($array_productos_cestas, $id_producto, $cantidad, $cantidad_a_eliminar){
 
     foreach($array_productos_cestas as $producto){
@@ -461,6 +432,7 @@ function restar_productos_cestas($id_producto, $cesta, $cantidad_a_eliminar){
     }
 }
 
+//Función que va a reducir el importe del valor total de la cesta, dependiendo de los productos que saque de la cesta el usuario
 function restar_valor_cesta($cesta, $cantidad_a_eliminar, $id_producto){
     global $conexion;
 
@@ -496,9 +468,49 @@ function eliminar_productos_productos_cestas(){
     }
 }
 
+//Y por fin... La función para formalizar el pedido.
+/*
+Esta funcion recibe por parametros el array de objetos ProductoCesta con el que trabajamos en la pagina cesta.
+Creamos un pedido asociado al usuario, y nos quedamos con el autogenerado
+Recorremos todos los objetos existentes en la cesta, realizando una insercion por cada uno de ellos en lineas_pedidos
+Vaciamos la cesta (precioTotal a cero)
+Eliminamos todos los registros de productos_cestas que acabamos de procesar.
+*/
 
+function formalizar_pedido($array_productos_cestas, $usuario, $cesta){
+    global $conexion;
+ 
+    $consulta_valor = "SELECT precioTotal FROM cestas WHERE idCesta=$cesta";
+    $resultado = $conexion->query($consulta_valor);
 
+    if(!$resultado){
+        die("Error en la funcion formalizar_pedido al consultar precioTotal: ". $conexion->error);
+    }else{
+        $fila = $resultado->fetch_assoc();
+        $precio_total = $fila['precioTotal'];
+        //Creamos el pedido, y nos quedamos con el autogenerado al instante.
+        $orden_crear_pedido = "INSERT INTO pedidos (usuario, precioTotal) VALUES ('$usuario', $precio_total)";
+        if($conexion -> query($orden_crear_pedido)){//Necesitamos el id del pedido que se acaba de autogenerar
+            $id_pedido = $conexion->insert_id; //MAGIA
+        }
+        //Ahora recorremos el array de objetos, por cada uno, haremos la inserción que se pide.
+        foreach($array_productos_cestas as $producto){
+            $nueva_insercion = "INSERT INTO lineas_pedidos (idProducto, idPedido, precioUnitario, cantidad)
+                                VALUES($producto->id_producto, $id_pedido, $producto->precio_unitario, $producto->cantidad)";
+            
+            if($conexion->query($nueva_insercion) === FALSE) {
+                echo "Error en el foreach de inserciones de la funcion formalizar pedido: ".$conexion->error;
+                break; //En caso de error, salimos del bucle e indicamos el error.
+            }
+        }
+        //Establecemos en 0 el valor de la cesta del usuario pasado por parámetro
+        $orden_vaciar_cesta = "UPDATE cestas SET precioTotal = 0 WHERE usuario = '$usuario'";
+        $conexion->query($orden_vaciar_cesta);
 
-
+        //Eliminamos todos los productos_cestas asociados a el número de cesta pasado por parámetro
+        $orden_despejar_productos_cestas = "DELETE FROM productos_cestas WHERE idCesta = $cesta";
+        $conexion->query($orden_despejar_productos_cestas);
+    }
+}
 
 ?>

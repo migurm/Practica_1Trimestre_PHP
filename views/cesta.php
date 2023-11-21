@@ -57,7 +57,9 @@
 
         }else if(isset($_POST["formalizar_pedido"])){
             echo "<p>Formalizar el pedido</p>";
-
+            //Vale, aquí nos da igual si se ha tocado la web con el inspeccionar
+            //Nuestra materia prima es el array de ProductoCesta.
+            formalizar_pedido($array_productos_cestas, $usuario, $cesta);
 
 
 
