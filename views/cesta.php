@@ -23,67 +23,34 @@
     $sumatorioPrecio = 0;
     //Creamos un objeto para mostrar todos los elementos de manera mas sencilla
     //Vamos a por esos datos ;)
-    $array_productos_cestas = productos_cestas_array($cesta);
+    $array_productos_cestas = productos_cestas_array(intval($cesta));
     ?>
-    <?php //Gestionamos los formularios-botones
-    /*
-        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["agregar_a_carrito"]) && $usuario != "invitado"){
-        $id_producto = depurar($_POST["id_producto"]);//Las inyecciones de sql mejor que no
-        $cantidad = depurar($_POST["cantidad"]);
-
-        if(stock_correcto($id_producto, $cantidad)){
-            echo "<h2>Tenemos stock!!</h2>";
-            agregar_a_carrito($id_producto, $cantidad, $usuario);
-        }else{
-            echo "<h2>No tenemos stock memo</h2>";
-        }
-    }
-    */
-
-
-
-
+    <?php
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         if(isset($_POST["eliminar_producto"])){
             //Botón de eliminar un producto de la cesta.
             $id_producto = depurar($_POST["id_producto"]);
-            echo "Producto numero: ".$id_producto;
+            echo "Producto numero: ".$id_producto."<br>";
             $cantidad_a_eliminar = depurar($_POST["cantidad"]);
+            $cantidad = depurar($_POST["cantidad_inicial"]);
 
-            //Podríamos comprobar aqui toooooooodos los objetos creados, y si algun valor no coincide con los que deberia
-            //No hacer absolutamente nada
-            //Tengo en esta pagina objetos con:
-            /*
-            $id_producto;
-            $nombre_producto;
-            $imagen;
-            $precio_unitario;
-            $cantidad;
-            $importe;
-            */
-            
-            if(cantidad_correcta(intval($cesta), $id_producto, $cantidad_a_eliminar)){
-                //Reestablecer el stock (sumar cantidad_a_eliminar a cantidad de tabla productos)
-                reestablecer_stock($id_producto, $cantidad_a_eliminar); //POR HACER
-                //Restar a la cantidad de productos_cestas la cantidad ingresada
-                restar_productos_cestas($id_producto, $cesta, $cantidad_a_eliminar); //POR HACER
-                //Restar a cestas el valor(cantidad ingresada * valor) de los productos retirados
-                restar_valor_cesta($cesta, $cantidad_a_eliminar, );
+            echo "ID Producto: $id_producto, Cantidad: $cantidad, Cantidad a Eliminar: $cantidad_a_eliminar<br>";
 
-
-
-
+            if(comprobar_valores($array_productos_cestas, intval($id_producto), intval($cantidad), intval($cantidad_a_eliminar))){
+                echo"No lo has modificado<br>";
+                if(cantidad_correcta(intval($cesta), $id_producto, $cantidad_a_eliminar)){
+                    echo "Se puede operar<br>";
+                    reestablecer_stock($id_producto, $cantidad_a_eliminar);
+                    restar_productos_cestas($id_producto, $cesta, $cantidad_a_eliminar);
+                    restar_valor_cesta($cesta, $cantidad_a_eliminar, $id_producto);
+                    eliminar_productos_productos_cestas();
+                    header("Location: ".$_SERVER['PHP_SELF']);
+                    exit();
+                }
+            }else{
+                echo "Está feo modificar los formularios ajenos!";
             }
-            
-
-
-
-
-
-
-
-
 
 
 
@@ -122,6 +89,7 @@
                         </div>
                     </div>
                     <form action="" method="POST">
+                        <input type="hidden" name="cantidad_inicial" value="<?php echo $producto->cantidad ?>">
                         <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
                         <select name="cantidad">
                             <?php 

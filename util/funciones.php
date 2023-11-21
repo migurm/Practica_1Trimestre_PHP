@@ -329,7 +329,7 @@ function asigna_cesta($usuario){
         return $fila['idCesta'];
     }
     else
-        die("Error en la consulta: ". $conexion->error);
+        die("Error en la consulta de la cesta: ". $conexion->error);
 }
 
 
@@ -343,11 +343,14 @@ function productos_cestas_array($cesta){
 
     $consulta_productos_cesta = "SELECT pc.idProducto, pc.cantidad, p.nombreProducto, p.imagen, p.precio
                                     FROM productos_cestas pc JOIN productos p ON pc.idProducto = p.idProducto
-                                    WHERE pc.idCesta = 2;"; 
+                                    WHERE pc.idCesta = $cesta;"; 
     
     $resultado_productos_cesta = $conexion->query($consulta_productos_cesta);
 
-    if ($fila = $resultado_productos_cesta->fetch_assoc()) {//Ha funcionado
+    //No ha funcionado
+    if(!$resultado_productos_cesta){
+        die("Error en la funcion productos_cestas_array: ". $conexion->error);
+    }
 
         while($fila = $resultado_productos_cesta -> fetch_assoc()){/* fetch_assoc() crea una especie de array asociativo con las filas*/
             $nuevo_producto = new ProductoCesta (
@@ -362,13 +365,89 @@ function productos_cestas_array($cesta){
             array_push($array_productos, $nuevo_producto);
         } 
         return $array_productos;
-        
+}
+
+//Funcion para comprobar que no se han alterado los datos en el formulario, tienen que coincidir con el objeto que se mostró
+
+function comprobar_valores($array_productos_cestas, $id_producto, $cantidad, $cantidad_a_eliminar){
+
+    foreach($array_productos_cestas as $producto){
+        echo "ID Producto: {$producto->id_producto}, Cantidad: {$producto->cantidad}, Cantidad a Eliminar: ($cantidad>=$cantidad_a_eliminar)<br>";
+
+        if (($producto->id_producto === $id_producto) &&
+            ($producto->cantidad === $cantidad) &&
+            ($producto->cantidad >= $cantidad_a_eliminar)){
+               return true; 
+            }
+                    
+    }
+    return false;
+}
+
+//Funcion para reestablecer el stock eliminado de la cesta en la tabla producto.
+function reestablecer_stock($id_producto, $cantidad_a_eliminar){
+    global $conexion;
+
+    $orden_suma = "UPDATE productos SET cantidad = cantidad + $cantidad_a_eliminar WHERE idProducto = $id_producto";
+
+    if($conexion->query($orden_suma) === TRUE){
+        echo "Stock actualizado";
     }else{
-        //A veces, la vida no es como queremos.
+        $conexion->error;
+    }
+}
+
+//Funcion para eliminar los productos de la cesta
+function restar_productos_cestas($id_producto, $cesta, $cantidad_a_eliminar){
+    global $conexion;
+
+    $orden_resta = "UPDATE productos_cestas SET cantidad = cantidad - $cantidad_a_eliminar WHERE idProducto = $id_producto AND idCesta = $cesta";
+
+    if($conexion->query($orden_resta) === TRUE){
+        echo "Productos cestas actualizados";
+    }else{
+        $conexion->error;
+    }
+}
+
+function restar_valor_cesta($cesta, $cantidad_a_eliminar, $id_producto){
+    global $conexion;
+
+    $consulta_precio = "SELECT precio FROM productos WHERE idProducto = $id_producto";
+    $temp_precio = $conexion->query($consulta_precio);
+
+    if($temp_precio){
+        $fila = $temp_precio->fetch_assoc();
+        $precio = $fila['precio'];
+        $resta = $precio*$cantidad_a_eliminar;
+        $orden_suma_valor = "UPDATE cestas SET precioTotal = precioTotal - $resta WHERE idCesta = $cesta";
+
+        if($conexion->query($orden_suma_valor) === TRUE){
+            echo "El valo de tu cesta ha sido actualizado";
+        }else{
+            $conexion->error;
+        }
+    }else{
         die("Error en la consulta: ". $conexion->error);
     }
 
 }
+
+//Función que va a eliminar los productos de la cesta cuya cantidad a comprar se quede a cero.
+function eliminar_productos_productos_cestas(){
+    global $conexion;
+
+    $orden_eliminar = "DELETE FROM productos_cestas WHERE cantidad = 0";
+    if($conexion->query($orden_eliminar) === TRUE){
+        echo "productos eliminados de la cesta";
+    }else{
+        $conexion->error;
+    }
+}
+
+
+
+
 
 
 ?>
