@@ -36,23 +36,44 @@
             echo "<h2>Tenemos stock!!</h2>";
             agregar_a_carrito($id_producto, $cantidad, $usuario);
         }else{
-            echo "<h2>No tenemos stock memo</h2>";
+            echo "<h2>No tenemos stock, nice try</h2>";
         }
     }
     ?>
-
-
-    <div class="container">
-        <h1>Página principal</h1>
-        <h2>Usuari@: <?php echo $usuario ?></h2>
-        <h3>Cesta: <?php echo $valorCesta ?>€</h3>
-        <!--  Enlace a cierre de sesión -->
-        <a href="cerrar_sesion.php">Cerrar sesión</a>
-
-        <!-- Enlace a iniciar sesion -->
-        <a href=""></a>
-
-        
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">¿PHP? mi pasión</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li>
+                        <span class="nav-link"><?php echo $usuario; ?></span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cesta.php">Cesta: <?php echo $valorCesta; ?>€</a>
+                    </li>
+                    <li class="nav-item">
+                        <?php
+                        if($usuario != "invitado"){
+                            echo "<a class='nav-link' href='cerrar_sesion.php'>Cerrar sesión</a>";
+                        }else{
+                            echo "<a class='nav-link' href='login.php'>Iniciar sesion</a>";
+                            echo "</li><li class='nav-item'>";
+                            echo "<a class='nav-link' href='usuarios.php'>Regístrese</a>";
+                        }
+                        
+                        ?>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="jumbotron text-center">
+        <h2 class="display-4">Bienvenido a libros para programar</h2>
+        <p class="lead">Observe nuestra amplia selección de libros, adaptados a todos los niveles, desde <b>sumar</b> a <b>machine learning</b></p>
     </div>
     <div>
         <?php

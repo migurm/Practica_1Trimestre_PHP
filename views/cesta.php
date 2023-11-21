@@ -9,6 +9,7 @@
     <?php require "../util/funciones.php" ?>
 </head>
 <body>
+    <a href="principal.php">Volver a tienda</a>
     <?php //Gestiones de inicio de sesión si lo hay.
         session_start();
         if(isset($_SESSION["usuario"]) && $_SESSION["usuario"] != "invitado"){
@@ -67,42 +68,45 @@
     
     ?>
 
-
-
     <div class="container mt-5">
         <h1 class="mb-4">Mi cesta</h1>
         <div id="cesta" class="card">
             <ul class="list-group lista-productos">
             <?php
-            foreach($array_productos_cestas as $producto){
-                $sumatorioPrecio += ($producto->cantidad * $producto->precio_unitario);
-                ?>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                        <div class="detalles-producto d-flex alignt-items-center">
-                            <img src="<?php echo $producto->imagen ?>" alt="aquí iria la imagen" class="mr-3" style="width: 80px; height: 100px;">
-                            <div class="d-flex flex-column justify-content-center align-items-center space">
-                                <p class="mb-1"><?php echo $producto->nombre_producto ?></p>
-                                <p class="mb-1">Precio (ud): <?php echo $producto->precio_unitario ?>€</p>
-                                <p class="mb-1">Cantidad: <?php echo $producto->cantidad ?></p>
+            if(empty($array_productos_cestas)){
+                echo "<h3>No tienes productos todavía en la cesta.</h3>";//No tenemos nada en el array de objetos ProductosCesta
+
+            }else{
+                foreach($array_productos_cestas as $producto){
+                    $sumatorioPrecio += ($producto->cantidad * $producto->precio_unitario);
+                    ?>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="detalles-producto d-flex alignt-items-center">
+                                <img src="<?php echo $producto->imagen ?>" alt="aquí iria la imagen" class="mr-3" style="width: 80px; height: 100px;">
+                                <div class="d-flex flex-column justify-content-center align-items-center space">
+                                    <p class="mb-1"><?php echo $producto->nombre_producto ?></p>
+                                    <p class="mb-1">Precio (ud): <?php echo $producto->precio_unitario ?>€</p>
+                                    <p class="mb-1">Cantidad: <?php echo $producto->cantidad ?></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <form action="" method="POST">
-                        <input type="hidden" name="cantidad_inicial" value="<?php echo $producto->cantidad ?>">
-                        <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
-                        <select name="cantidad">
-                            <?php 
-                                for($i = 1; $i <= $producto->cantidad; $i++){
-                                    echo "<option value='$i'>$i</option>";
-                                }
-                            ?>
-                        </select>
-                        <button class="btn btn-danger btn-eliminar" name="eliminar_producto">Eliminar</button>
+                        <form action="" method="POST">
+                            <input type="hidden" name="cantidad_inicial" value="<?php echo $producto->cantidad ?>">
+                            <input type="hidden" name="id_producto" value="<?php echo $producto->id_producto ?>">
+                            <select name="cantidad">
+                                <?php 
+                                    for($i = 1; $i <= $producto->cantidad; $i++){
+                                        echo "<option value='$i'>$i</option>";
+                                    }
+                                ?>
+                            </select>
+                            <button class="btn btn-danger btn-eliminar" name="eliminar_producto">Eliminar</button>
 
-                    </form>
-                </li>
-            <?php
+                        </form>
+                    </li>
+                <?php
+                }
             }?>
             </ul>
 

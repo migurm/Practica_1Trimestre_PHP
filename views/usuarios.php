@@ -8,8 +8,31 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous" defer></script>	
 	<?php require "../util/funciones.php" ?>
 	<?php require "../util/base_de_datos.php" ?>
+	<style>
+		body{
+			background-color: #f2f2f2;
+		}
+	</style>
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">¿PHP? mi pasión</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href='principal.php'>Ir a tienda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href='login.php'>Iniciar sesion</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 	<?php
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 
@@ -41,31 +64,36 @@
 	}
 	?>
 	<div class="container mt-5">
-		<form action="" method="POST">
-			<fieldset>
-				<legend>Nuevo usuario</legend>
+		<div class="row justify-content-center">
+			<div class="col-md-4">
+				<div class="card">
+					<h1 class="card-header text-center">Nuevo registro</h1>
+					<div class="card-body">
+						<form action="" method="POST">
+							<div class="mb-3">
+								<label for="nombre_usuario">Nombre:</label>
+								<input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario">
+								<?php if(isset($err_nombre_usuario)) echo "<p class='text-danger'>$err_nombre_usuario</p>"; ?>
+							</div>
 
-				<div class="form-group">
-					<label for="nombre_usuario">Nombre:</label>
-					<input type="text" class="form-control" id="nombre_usuario" name="nombre_usuario">
-					<?php if(isset($err_nombre_usuario)) echo "<p class='text-danger'>$err_nombre_usuario</p>"; ?>
-				</div>
+							<div class="mb-3">
+								<label for="contrasena_usuario">Contraseña:</label>
+								<input type="text" class="form-control" id="contrasena_usuario" name="contrasena_usuario">
+								<?php if(isset($err_contrasena_usuario)) echo "<p class='text-danger'>$err_contrasena_usuario</p>"; ?>
+							</div>
+								
+							<div class="mb-3">
+								<label>Fecha de nacimiento:</label>
+								<input type="date" class ="form-control" id="fecha_nacimiento "name="fecha_nacimiento">
+								<?php if(isset($err_fecha_nacimiento)) echo "<p class='text-danger'>$err_fecha_nacimiento</p>"; ?>
+							</div>
 
-				<div class="form-group">
-					<label for="contrasena_usuario">Contraseña:</label>
-					<input type="text" class="form-control" id="contrasena_usuario" name="contrasena_usuario">
-					<?php if(isset($err_contrasena_usuario)) echo "<p class='text-danger'>$err_contrasena_usuario</p>"; ?>
+							<input type="submit" class="btn btn-primary" value="Registrar">
+						</form>
+					</div>
 				</div>
-				
-				<div class="form-group">
-					<label>Fecha de nacimiento:</label>
-					<input type="date" class ="form-control" id="fecha_nacimiento "name="fecha_nacimiento">
-					<?php if(isset($err_fecha_nacimiento)) echo "<p class='text-danger'>$err_fecha_nacimiento</p>"; ?>
-				</div>
-
-				<input type="submit" class="btn btn-primary mt-2" value="Registrar">
-			</fieldset>
-		</form>
+			</div>
+		</div>
 	</div>
 	<?php
 	if((isset($nombre_usuario))&& isset($contrasena_usuario) && isset($fecha_nacimiento)){
