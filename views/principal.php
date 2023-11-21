@@ -70,6 +70,7 @@
                         <?php
                         if($usuario == "invitado"){
                             echo "<a class='nav-link' href='cerrar_sesion.php'>Cerrar sesión</a>"; //En todas las paginas siempre se mostrará
+                            echo "<a class='nav-link' href='login.php'>Iniciar sesion</a>";
                         }else{
                             echo "<a class='nav-link' href='login.php'>Iniciar sesion</a>";
                             echo "</li><li class='nav-item'>";

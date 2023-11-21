@@ -40,8 +40,8 @@
     <?php
     if($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $usuario = $_POST["usuario"];
-        $contrasena = $_POST["contrasena"];
+        $usuario = depurar($_POST["usuario"]);
+        $contrasena = depurar($_POST["contrasena"]);
         $sql = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
         $resultado = $conexion -> query($sql);
 
