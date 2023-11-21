@@ -23,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href='principal.php'>Ir a tienda</a>
+                        <a class="nav-link" href='principal.php'>Entrar como invitado</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href='usuarios.php'>¿Eres nuev@? Regístrese</a>

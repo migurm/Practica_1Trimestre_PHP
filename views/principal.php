@@ -17,6 +17,10 @@
     if(isset($_SESSION["usuario"])){
         $usuario = $_SESSION["usuario"];
         $valorCesta = valor_cesta($usuario);
+        if($usuario != "invitado"){
+            $rol = $_SESSION["rol"];    
+        }
+        
 
     }else{
         //header('location: iniciar_sesion.php'); O mandamos a otra página
@@ -51,6 +55,14 @@
                     <li>
                         <span class="nav-link"><?php echo $usuario; ?></span>
                     </li>
+                    <?php
+                        
+                        if(isset($rol) && ($rol === "admin")){
+                            echo "<li class='nav-item'>";
+                            echo"<a class='nav-link' href='productos.php'>AGREGAR PRODUCTOS</a></li>";
+                            echo"</li>";
+                        }
+                    ?>
                     <li class="nav-item">
                         <a class="nav-link" href="cesta.php">Cesta: <?php echo $valorCesta; ?>€</a>
                     </li>
@@ -65,7 +77,6 @@
                         }
                         
                         ?>
-                        
                     </li>
                 </ul>
             </div>
